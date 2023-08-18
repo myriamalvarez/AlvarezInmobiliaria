@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AlvarezInmobiliaria</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AlvarezInmobiliaria.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AlvarezInmobiliaria</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="Index">Propietarios</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="Index">Inquilinos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+<main role="main" class="pb-3">
+    <div class="container">
+            @if (ViewBag.Success != null)
+            {
+                <div id="notification" class="alert alert-success fade show d-flex justify-content-between" role="alert">
+                    <span><i class="fa-solid fa-thumbs-up"></i> @ViewBag.Success</span>
+                </div>
+            }
+            else if (ViewBag.Error != null)
+            {
+                <div id="notification" class="alert alert-danger fade show d-flex justify-content-between" role="alert">
+                    <span><strong>Error!</strong>@ViewBag.Error</span>
+                </div>
+            }
+            else if (ViewBag.Info != null)
+            {
+                <div id="info-notification" class="alert alert-warning fade show d-flex justify-content-between" role="alert">
+                    <span><i class="fa-solid fa-circle-info"></i> @ViewBag.Info</span>
+                    <span id="close-warning-btn" style="cursor: pointer;"><i class="fa-solid fa-xmark"></i></span>
+                </div>
+            }
+  
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - AlvarezInmobiliaria - <a asp-area="" asp-controller="Home" asp-action="Privacy">Políticas de privacidad</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

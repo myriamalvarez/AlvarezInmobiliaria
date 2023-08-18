@@ -1,0 +1,54 @@
+@model IEnumerable<AlvarezInmobiliaria.Models.Propietario>
+
+@{
+    ViewData["Title"] = "Propietarios";
+}
+
+<h1>Listado de propietarios</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-person-add"></i>Nuevo propietario</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Detalles"><i class="bi bi-info-circle"></i>Detalles</a>
+				    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Eliminar"><i class="bi bi-trash"></i>Eliminar</a>
+			    </td>
+            </tr>
+        }
+    </tbody>
+</table>
