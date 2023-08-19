@@ -36,9 +36,9 @@ public class PropietarioController : Controller
         try
         {
            int res = repositorio.Alta(propietario);
-           if (res > 0) 
+           if (res != 0) 
            {
-            ViewBag.Mensaje = "Propietario creado con exito!";
+            TempData["Success"] = "Propietario creado con exito!";
             return RedirectToAction("Index");
            }
            else
@@ -92,7 +92,7 @@ public class PropietarioController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = $"Propietario {propietario.ToString} eliminado con exito";
+            TempData["Mensaje"] = "Propietario eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)
