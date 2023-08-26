@@ -1,0 +1,59 @@
+@model AlvarezInmobiliaria.Models.Contrato
+
+@{
+    ViewData["Title"] = "Detalles del contrato";
+}
+
+<h1>Detalle del contrato</h1>
+
+<div class="container">
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Id)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Id)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FechaInicio)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FechaInicio)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FechaFin)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FechaFin)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Alquiler)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Alquiler)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Estado)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Estado)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.InquilinoId)
+    </dt>
+    <dd class="col-sm-10">
+        @if(Model.Inquilino != null){
+				@(Model.Inquilino.ToString())}
+    </dd>
+            <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.InmuebleId)
+    </dt>
+    <dd class="col-sm-10">
+        @if(Model.Inmueble != null){
+				@(Model.Inmueble.Direccion)}
+    </dd>
+</dl>
+<div>
+    <a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i>Volver al listado</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
+</div>

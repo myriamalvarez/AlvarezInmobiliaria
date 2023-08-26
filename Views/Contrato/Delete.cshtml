@@ -1,0 +1,54 @@
+@model AlvarezInmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Eliminar";
+}
+<div class="d-flex align-items-center justify-content-between">
+    <h1>Eliminar contrato</h1>
+</div>
+<div class="detail-container"></div>
+<hr />
+<p>
+    <strong>@Html.DisplayNameFor(model => model.FechaInicio): </strong>
+    @Html.DisplayFor(model => model.FechaInicio)
+</p>
+<p>
+    <strong>@Html.DisplayNameFor(model => model.FechaFin): </strong>
+    @Html.DisplayFor(model => model.FechaFin)
+</p>
+<p>
+    <strong>@Html.DisplayNameFor(model => model.Alquiler): </strong>
+    @Html.DisplayFor(model => model.Alquiler)
+</p>
+<p>
+    <strong>@Html.DisplayNameFor(model => model.InmuebleId): </strong>
+    @(Model.Inmueble?.Direccion)
+</p>
+<p>
+    <strong>@Html.DisplayNameFor(model => model.InquilinoId): </strong>
+    @(Model.Inquilino?.ToString())
+</p>
+	<br/>
+	<form asp-action="Delete" id="deleteForm" asp-route-id="@Model.Id">
+		<input type="submit" value="Eliminar" class="btn btn-danger" />
+		<a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i>Volver al listado</a>
+	</form>
+</div>
+@section scripts
+{
+	<script>
+		document.getElementById('deleteForm').addEventListener('submit', function (e){
+			e.preventDefault();
+			swal({
+				title: 'Eliminar',
+				text: 'Esta seguro que desea cancelar este contrato? Esta acción generara una multa',
+				icon: 'warning',
+				buttons: ["Cancelar", "Ok"],
+				dangerMode: true,
+			}).then((confirmed) => {
+				if (confirmed){
+					this.submit();
+				}
+				})
+		});
+	</script>
+}
