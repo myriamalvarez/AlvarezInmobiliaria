@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 
@@ -38,7 +42,7 @@ public class InquilinoController : Controller
            int res = repositorio.Alta(inquilino);
            if (res > 0) 
            {
-            TempData["Mensaje"] = $"Inquilino {inquilino.ToString} creado con exito!";
+            TempData["Success"] = "Inquilino creado con exito!";
             return RedirectToAction("Index");
            }
            else
@@ -72,7 +76,7 @@ public class InquilinoController : Controller
         try
         {
             repositorio.Modificacion(inquilino);
-            TempData["Mensaje"] = $"El inquilino {inquilino.ToString} fue modificado correctamente";
+            TempData["Success"] = "El inquilino fue modificado correctamente";
             return RedirectToAction("Index");
         }
         catch (Exception ex)
@@ -92,7 +96,7 @@ public class InquilinoController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = $"Inquilino {inquilino.ToString} eliminado con exito";
+            TempData["Mensaje"] = "Inquilino eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)

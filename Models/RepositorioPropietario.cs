@@ -16,7 +16,7 @@ public class RepositorioPropietario
         var res = new List<Propietario>();
         using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
-            var query = "SELECT Id, Nombre, Apellido, Telefono FROM propietario;";
+            var query = "SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM propietario;";
 
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
@@ -30,7 +30,9 @@ public class RepositorioPropietario
                             Id = reader.GetInt32("Id"),
                             Nombre = reader.GetString("Nombre"),
                             Apellido = reader.GetString("Apellido"),
+                            Dni = reader.GetString("Dni"),
                             Telefono = reader.GetString("Telefono"),
+                            Email = reader.GetString("Email"),
                         });
                     }
                    } 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
+using System.ComponentModel;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -54,6 +55,7 @@ public class PropietarioController : Controller
         }
     }
 
+    [ReadOnly(true)]
     public ActionResult Details(int id)
     {
         var propietario = repositorio.ObtenerPorId(id);
@@ -72,7 +74,7 @@ public class PropietarioController : Controller
         try
         {
             repositorio.Modificacion(propietario);
-            TempData["Success"] = $"El propietario {propietario.ToString} fue modificado correctamente";
+            TempData["Success"] = "El propietario fue modificado correctamente";
             return RedirectToAction("Index");
         }
         catch (Exception ex)

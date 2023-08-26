@@ -1,0 +1,73 @@
+@model AlvarezInmobiliaria.Models.Inmueble
+
+@{
+	ViewData["Title"] = "Eliminar";
+}
+
+<div class="d-flex align-items-center justify-content-between">
+	<h1>Eliminar un inmueble</h1>
+</div>
+
+<div class="detail-container">
+	<hr />
+	<p>
+		<strong>@Html.DisplayNameFor(model => model.Propietario): </strong>
+		@(Model.Propietario!.ToString())
+	</p>
+    	<p>
+		<strong>@Html.DisplayNameFor(model => model.Direccion): </strong>
+		@Html.DisplayFor(model => model.Direccion)
+	</p>
+    <p>
+		<strong>@Html.DisplayNameFor(model => model.Uso): </strong>
+		@Html.DisplayFor(model => model.UsoNombre)
+	</p>
+	<p>
+		<strong>@Html.DisplayNameFor(model => model.Tipo): </strong>
+		@Html.DisplayFor(model => model.TipoNombre)
+	</p>
+	<p>
+		<strong>@Html.DisplayNameFor(model => model.Estado): </strong>
+		@Html.DisplayFor(model => model.EstadoNombre)
+	</p>
+    	<p>
+		<strong>@Html.DisplayNameFor(model => model.Ambientes): </strong>
+		@Html.DisplayFor(model => model.Ambientes)
+	</p>
+    	<p>
+		<strong>@Html.DisplayNameFor(model => model.Latitud): </strong>
+		@Html.DisplayFor(model => model.Latitud)
+	</p>
+    	<p>
+		<strong>@Html.DisplayNameFor(model => model.Longitud): </strong>
+		@Html.DisplayFor(model => model.Longitud)
+	</p>
+    	<p>
+		<strong>@Html.DisplayNameFor(model => model.Precio): </strong>
+		@Html.DisplayFor(model => model.Precio)
+	</p>
+	<br/>
+	<form asp-action="Delete" id="deleteForm" asp-route-id="@Model.Id">
+		<input type="submit" value="Eliminar" class="btn btn-danger" />
+		<a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i>Volver al listado</a>
+	</form>
+</div>
+@section scripts
+{
+	<script>
+		document.getElementById('deleteForm').addEventListener('submit', function (e){
+			e.preventDefault();
+			swal({
+				title: 'Eliminar',
+				text: 'Esta seguro que desea eliminar este inmueble?',
+				icon: 'warning',
+				buttons: ["Cancelar", "Ok"],
+				dangerMode: true,
+			}).then((confirmed) => {
+				if (confirmed){
+					this.submit();
+				}
+				})
+		});
+	</script>
+}

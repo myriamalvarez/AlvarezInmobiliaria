@@ -1,0 +1,91 @@
+@model AlvarezInmobiliaria.Models.Inmueble;
+
+@{
+    ViewData["Title"] = "Nuevo inmueble";
+}
+
+<h1>Nuevo inmueble</h1>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Direccion" class="control-label"></label>
+                    <input asp-for="Direccion" class="form-control" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Uso" class="control-label"></label>
+                    <select class="form-control" name="Uso">
+                        <option value="" selected disabled>Seleccione un uso...</option>
+                            @foreach (var uso in (IDictionary<int, string>)ViewBag.usos)
+                                {
+                                    <option value="@uso.Key">@uso.Value</option>
+                                }
+                    </select>
+                    <span asp-validation-for="Uso" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tipo" class="control-label"></label>
+                    <select class="form-control" name="Tipo">
+                        <option value="" selected disabled>Seleccione un tipo...</option>
+                            @foreach (var tipo in(IDictionary<int, string>)ViewBag.tipos)
+                                {
+                                    <option value="@tipo.Key">@tipo.Value</option>
+                                }
+                    </select>
+                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ambientes" class="control-label">Ambientes</label>
+                    <input asp-for="Ambientes" class="form-control"/>
+                    <span asp-validation-for="Ambientes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Latitud" class="control-label">Latitud</label>
+                    <input asp-for="Latitud" class="form-control"/>
+                    <span asp-validation-for="Latitud" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Longitud" class="control-label">Longitud</label>
+                    <input asp-for="Longitud" class="form-control"/>
+                    <span asp-validation-for="Longitud" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Estado" class="control-label">Estado</label>
+                    <select class="form-control" name="Estado">
+                        <option value="" selected disabled>Selccione un estado...</option>
+                            @foreach (var estado in (IDictionary<int, string>)ViewBag.estados)
+                                {
+                                    <option value="@estado.Key">@estado.Value</option>
+                                }
+                    </select>
+                    <span asp-validation-for="Estado" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Precio" class="control-label"></label>
+                    <input asp-for="Precio" class="form-control" />
+                    <span asp-validation-for="Precio" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PropietarioId" class="control-label"></label>
+                    <select class="form-control" name="propietarioId">
+                        <option value="" selected disabled>Seleccione un propietario...</option>
+                            @if(ViewBag.propietarios != null)
+                            {
+                                foreach (var p in (List<Propietario>)ViewBag.propietarios)
+                                    {
+                                        <option value="@p.Id">@p.ToString()</option>
+                                    }
+                            }
+                    </select>
+                </div>
+                <br>
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-reply"></i>Volver al listado</a>
+                <button type="submit" class="btn btn-primary"><i class="ion-ios-checkmark"></i>Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>        

@@ -32,3 +32,8 @@ namespace AlvarezInmobiliaria.Models
         public override string ToString() => $"{Nombre} {Apellido}";
     }
 }
+
+
+
+
+

@@ -30,33 +30,35 @@
                          <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="Index">Inquilinos</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="Index">Inmuebles</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container"></div>
-        <main role="main" class="pb-3"> 
-            @if (ViewBag.Success != null)
+            @if (TempData["Success"] != null)
             {
                 <div id="notification" class="alert alert-success fade show d-flex justify-content-between" role="alert">
-                    <span><i class="fa-solid fa-thumbs-up"></i> @ViewBag.Success</span>
+                    <span><i class="fa-solid fa-thumbs-up"></i> @TempData.Peek("Success")</span>
                 </div>
             }
-            else if (ViewBag.Error != null)
+            else if (TempData["Error"] != null)
             {
                 <div id="notification" class="alert alert-danger fade show d-flex justify-content-between" role="alert">
-                    <span><strong>Error!</strong>@ViewBag.Error</span>
+                    <span><strong>Error!</strong>@TempData.Peek("Error")</span>
                 </div>
             }
-            else if (ViewBag.Info != null)
+            else if (TempData["Info"] != null)
             {
                 <div id="info-notification" class="alert alert-warning fade show d-flex justify-content-between" role="alert">
-                    <span><i class="fa-solid fa-circle-info"></i> @ViewBag.Info</span>
+                    <span><i class="fa-solid fa-circle-info"></i> @TempData.Peek("Info")</span>
                     <span id="close-warning-btn" style="cursor: pointer;"><i class="fa-solid fa-xmark"></i></span>
                 </div>
             }
-  
+        <main role="main" class="pb-3"> 
             @RenderBody()
         </main>
     </div>
