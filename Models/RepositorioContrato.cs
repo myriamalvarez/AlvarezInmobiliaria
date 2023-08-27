@@ -36,37 +36,27 @@ public class RepositorioContrato
     }
     public int Baja(int id)
 	{
-		int res = 0;
-        int mta = 0;
-		using (MySqlConnection connection = new MySqlConnection(connectionString))
+		int res = -1;
+		using (MySqlConnection conn = new MySqlConnection(connectionString))
 		{
-            var multa = @"SELECT Multa(@id);";
-            using (var command = new MySqlCommand(multa, connection))
-            {
-                command.Parameters.AddWithValue("@id", id);
-				connection.Open();
-				mta = Convert.ToInt32(command.ExecuteScalar());
-				connection.Close();
-            }
-
 			var query = @"DELETE FROM contrato WHERE Id = @id;";
-
-			using (var command = new MySqlCommand(query, connection))
+			using (MySqlCommand cmd = new MySqlCommand(query, conn))
 			{
-				command.Parameters.AddWithValue("@id", id);
-				connection.Open();
-				res = command.ExecuteNonQuery();
-				connection.Close();
+				cmd.Parameters.AddWithValue("@Id", id);
+				conn.Open();
+				res = cmd.ExecuteNonQuery();
+				conn.Close();
 			}
 		}
-		return mta;
+		return res;
 	}
     public int Modificacion(Contrato contrato) 
     {
-        int res = 0;
+        int res = -1;
         using(MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"UPDATE contrato SET fechaInicio = @fechaInicio, fechaFin = @fechaFin, alquiler = @alquiler, inmuebleId = @inmuebleId, inquilinoId = @inquilinoId, estado = @estado
+            var query = @"UPDATE contrato SET FechaInicio = @fechaInicio, FechaFin = @fechaFin, Alquiler = @alquiler, 
+                                InmuebleId = @inmuebleId, InquilinoId = @inquilinoId, Estado = @estado
                         WHERE Id = @id;";
             using (var command = new MySqlCommand(query, connection))
             {
@@ -76,6 +66,7 @@ public class RepositorioContrato
                 command.Parameters.AddWithValue("@inmuebleId", contrato.InmuebleId);
                 command.Parameters.AddWithValue("@inquilinoId", contrato.InmuebleId);
                 command.Parameters.AddWithValue("@estado", contrato.Estado);
+                command.Parameters.AddWithValue("@id", contrato.Id);
                 connection.Open();
                 res = command.ExecuteNonQuery();
                 connection.Close();

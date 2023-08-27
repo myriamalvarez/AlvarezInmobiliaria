@@ -98,7 +98,7 @@ public class ContratoController : Controller
         catch (Exception ex)
         {
             TempData["Error"] = ex.Message;
-            return View();
+            return View("Index");
         }
     }
 
