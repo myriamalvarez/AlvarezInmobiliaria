@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-08-2023 a las 08:10:03
+-- Tiempo de generación: 27-08-2023 a las 06:36:14
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -42,7 +42,8 @@ CREATE TABLE `contrato` (
 --
 
 INSERT INTO `contrato` (`Id`, `FechaInicio`, `FechaFin`, `Alquiler`, `InmuebleId`, `InquilinoId`, `Estado`) VALUES
-(1, '2023-09-01', '2024-09-01', 100000, 1, 1, 'Vigente');
+(1, '2023-09-01', '2024-09-01', 100000, 1, 1, 'Vigente'),
+(2, '2023-03-01', '2024-03-01', 86000, 3, 6, 'Vigente');
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,9 @@ CREATE TABLE `inmueble` (
 --
 
 INSERT INTO `inmueble` (`Id`, `Direccion`, `Uso`, `Tipo`, `Ambientes`, `Latitud`, `Longitud`, `Estado`, `Precio`, `PropietarioId`) VALUES
-(1, 'Alsina 325 San Luis', 1, 1, 5, 999.99999, -999.99999, 1, 100000.00, 1);
+(1, 'Alsina 325 San Luis', 1, 1, 5, 999.99999, -999.99999, 2, 100000.00, 1),
+(3, 'Lafinur 488 San Luis', 2, 3, 1, 11.66000, -78.82000, 1, 86000.00, 3),
+(4, 'Lavalle 293 P 1° B San Luis', 1, 2, 2, 999.99999, -58.32010, 1, 75000.00, 9);
 
 -- --------------------------------------------------------
 
@@ -91,7 +94,10 @@ CREATE TABLE `inquilino` (
 
 INSERT INTO `inquilino` (`Id`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email`) VALUES
 (1, 'Luis', 'Gomez', '25889242', '0266-4548800', 'luisgomez@gmail.com'),
-(3, 'Ariel', 'Montoya', '13890753', '0266-4058661', 'arielmontoya@gmail.com');
+(3, 'Ariel', 'Montoya', '13890753', '0266-4058661', 'arielmontoya@gmail.com'),
+(4, 'Rodrigo ', 'Diaz', '38454663', '0266-4058098', 'rodrigodiaz@gmail.com'),
+(5, 'Oscar ', 'Moran', '16685614', '0266-4051446', 'oscarmoran@gmail.com'),
+(6, 'Marcela', 'Ramirez', '34456988', '02664076969', 'marcelaramirez@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -131,14 +137,15 @@ INSERT INTO `propietario` (`Id`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email
 --
 ALTER TABLE `contrato`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `InmuebleId` (`InmuebleId`,`InquilinoId`);
+  ADD KEY `InquilinoId` (`InquilinoId`),
+  ADD KEY `InmuebleId` (`InmuebleId`,`InquilinoId`) USING BTREE;
 
 --
 -- Indices de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `PropietarioId` (`PropietarioId`);
+  ADD KEY `PropietarioId` (`PropietarioId`) USING BTREE;
 
 --
 -- Indices de la tabla `inquilino`
@@ -160,25 +167,42 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
 --
 ALTER TABLE `inquilino`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
 --
 ALTER TABLE `propietario`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `contrato`
+--
+ALTER TABLE `contrato`
+  ADD CONSTRAINT `contrato_ibfk_1` FOREIGN KEY (`InquilinoId`) REFERENCES `inquilino` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `contrato_ibfk_2` FOREIGN KEY (`InmuebleId`) REFERENCES `inmueble` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `inmueble`
+--
+ALTER TABLE `inmueble`
+  ADD CONSTRAINT `inmueble_ibfk_1` FOREIGN KEY (`PropietarioId`) REFERENCES `propietario` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

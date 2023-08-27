@@ -100,8 +100,8 @@ public class RepositorioContrato
                     contratos.Add(new Contrato
                     {
                         Id = reader.GetInt32("Id"),
-                        FechaInicio = reader.GetDateTime("FechaInicio"),
-                        FechaFin = reader.GetDateTime("FechaFin"),
+                        FechaInicio = DateOnly.FromDateTime(reader.GetDateTime("FechaInicio")),
+                        FechaFin = DateOnly.FromDateTime(reader.GetDateTime("FechaFin")),
 						Alquiler = reader.GetDecimal("Alquiler"),
 						Estado = reader.GetString("Estado"),
                         InmuebleId = reader.GetInt32("InmuebleId"),
@@ -144,8 +144,8 @@ public class RepositorioContrato
 						contrato = new Contrato
 						{
 							Id = reader.GetInt32("Id"),
-                        FechaInicio = reader.GetDateTime("FechaInicio"),
-                        FechaFin = reader.GetDateTime("FechaFin"),
+                        FechaInicio = DateOnly.FromDateTime(reader.GetDateTime("FechaInicio")),
+                        FechaFin = DateOnly.FromDateTime(reader.GetDateTime("FechaFin")),
 						Alquiler = reader.GetDecimal("Alquiler"),
 						Estado = reader.GetString("Estado"),
                         InmuebleId = reader.GetInt32("InmuebleId"),

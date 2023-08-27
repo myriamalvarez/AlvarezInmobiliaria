@@ -9,11 +9,11 @@ namespace AlvarezInmobiliaria.Models;
 
         [Required (ErrorMessage = "La fecha de inicio es obligatoria")]
         [Display(Name = "Fecha de inicio")]
-        public DateTime? FechaInicio { get; set; }
+        public DateOnly FechaInicio { get; set; }
 
         [Required (ErrorMessage = "La fecha de finalización es obligatorio")]
         [Display(Name = "Fecha de finalización")]
-        public DateTime? FechaFin { get; set; }
+        public DateOnly FechaFin { get; set; }
 
         [Required (ErrorMessage = "El precio es obligatorio")]
         [Display(Name = "Monto mensual")]
