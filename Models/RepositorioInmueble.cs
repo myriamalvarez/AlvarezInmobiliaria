@@ -173,4 +173,36 @@ public class RepositorioInmueble
         return res;
     }
 
+    public List<Inmueble> ObtenerInmueblesDisponibles()
+    {
+        var res = new List<Inmueble>();
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT Id, Direccion, Uso, Tipo, Ambientes, Precio
+                        FROM inmueble WHERE Estado = 1;";
+
+            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                conn.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        res.Add(new Inmueble
+                        {
+                            Id = reader.GetInt32("Id"),
+                            Direccion = reader.GetString("Direccion"),
+                            Uso = reader.GetInt32("Uso"),
+                            Tipo = reader.GetInt32("Tipo"),
+                            Ambientes = reader.GetInt32("Ambientes"),
+                            Precio = reader.GetDecimal("Precio"),
+                        });
+                    }
+                }
+                conn.Close();
+            }
+        }
+        return res;
+    }
+
 }

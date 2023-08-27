@@ -21,7 +21,7 @@
                     <select class="form-control" name="Uso">
                             @foreach (var uso in (IDictionary<int, string>)ViewBag.usos)
                                 {
-                                    <option value="@uso.Key">@uso.Value</option>
+                                    @:<option @(Model.Uso == uso.Key ? "selected" : "") value="@uso.Key">@uso.Value</option>
                                 }
                     </select>
                     <span asp-validation-for="Uso" class="text-danger"></span>
@@ -31,7 +31,7 @@
                     <select class="form-control" name="Tipo">
                             @foreach (var tipo in(IDictionary<int, string>)ViewBag.tipos)
                                 {
-                                    <option value="@tipo.Key">@tipo.Value</option>
+                                    @:<option @(Model.Tipo == tipo.Key ? "selected" : "") value="@tipo.Key">@tipo.Value</option>
                                 }
                     </select>
                     <span asp-validation-for="Tipo" class="text-danger"></span>
@@ -56,7 +56,7 @@
                     <select class="form-control" name="Estado">
                             @foreach (var estado in (IDictionary<int, string>)ViewBag.estados)
                                 {
-                                    <option value="@estado.Key">@estado.Value</option>
+                                    @:<option @(Model.Estado == estado.Key ? "selected" : "") value ="@estado.Key">@estado.Value</option>
                                 }
                     </select>
                     <span asp-validation-for="Estado" class="text-danger"></span>

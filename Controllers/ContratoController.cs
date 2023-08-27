@@ -32,7 +32,7 @@ public class ContratoController : Controller
 
     public ActionResult Create()
     {
-       ViewBag.Inmuebles = repositorioInmueble.ObtenerInmuebles();
+       ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
        ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
 
        return View();
@@ -50,7 +50,7 @@ public class ContratoController : Controller
 
         try
         {
-            ViewBag.Inmuebles = repositorioInmueble.ObtenerInmuebles();
+            ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
             ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
             int res = repositorio.Alta(contrato);
             if (res != 0)
@@ -74,7 +74,7 @@ public class ContratoController : Controller
     public ActionResult Edit(int id)
     {
         var contrato = repositorio.ObtenerPorId(id);
-        ViewBag.Inmuebles = repositorioInmueble.ObtenerInmuebles();
+        ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
         ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
     
         return View(contrato);
@@ -84,6 +84,11 @@ public class ContratoController : Controller
     [ValidateAntiForgeryToken]
     public ActionResult Edit(int id, Contrato contrato)
     {
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Faltan datos";
+            return View(contrato);
+        }
         try
         {
             repositorio.Modificacion(contrato);
