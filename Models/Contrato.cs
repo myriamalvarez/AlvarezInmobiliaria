@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AlvarezInmobiliaria.Models;
 
+  
     public class Contrato
     {
         [Display(Name = "Código")]
@@ -33,5 +34,4 @@ namespace AlvarezInmobiliaria.Models;
 
         public Inquilino? Inquilino { get; set; }
 
-        public string? Estado { get; set; }
     }
