@@ -91,8 +91,8 @@ public class RepositorioContrato
                     contratos.Add(new Contrato
                     {
                         Id = reader.GetInt32("Id"),
-                        FechaInicio = DateOnly.FromDateTime(reader.GetDateTime("FechaInicio")),
-                        FechaFin = DateOnly.FromDateTime(reader.GetDateTime("FechaFin")),
+                        FechaInicio = reader.GetDateTime("FechaInicio"),
+                        FechaFin = reader.GetDateTime("FechaFin"),
 						Alquiler = reader.GetDecimal("Alquiler"),
 						Estado = reader.GetString("Estado"),
                         InmuebleId = reader.GetInt32("InmuebleId"),
@@ -135,21 +135,21 @@ public class RepositorioContrato
 						contrato = new Contrato
 						{
 							Id = reader.GetInt32("Id"),
-                        FechaInicio = DateOnly.FromDateTime(reader.GetDateTime("FechaInicio")),
-                        FechaFin = DateOnly.FromDateTime(reader.GetDateTime("FechaFin")),
-						Alquiler = reader.GetDecimal("Alquiler"),
-						Estado = reader.GetString("Estado"),
-                        InmuebleId = reader.GetInt32("InmuebleId"),
-                        InquilinoId = reader.GetInt32("InquilinoId"),
-						Inmueble = new Inmueble
+                            FechaInicio = reader.GetDateTime("FechaInicio"),
+                            FechaFin = reader.GetDateTime("FechaFin"),
+						    Alquiler = reader.GetDecimal("Alquiler"),
+						    Estado = reader.GetString("Estado"),
+                            InmuebleId = reader.GetInt32("InmuebleId"),
+                            InquilinoId = reader.GetInt32("InquilinoId"),
+						    Inmueble = new Inmueble
 							{
 								Direccion = reader.GetString("Direccion"),
 							},
-                        Inquilino = new Inquilino
-                        {
-                            Nombre = reader.GetString("Nombre"),
-                            Apellido = reader.GetString("Apellido"),
-                        }
+                            Inquilino = new Inquilino
+                            {
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                            }
 						};
 					}
 				}

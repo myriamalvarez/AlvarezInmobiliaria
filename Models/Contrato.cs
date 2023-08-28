@@ -7,13 +7,15 @@ namespace AlvarezInmobiliaria.Models;
         [Display(Name = "Código")]
         public int Id { get; set; }
 
+        [DataType(DataType.Date)]
         [Required (ErrorMessage = "La fecha de inicio es obligatoria")]
         [Display(Name = "Fecha de inicio")]
-        public DateOnly FechaInicio { get; set; }
+        public DateTime FechaInicio { get; set; }
 
+        [DataType(DataType.Date)]
         [Required (ErrorMessage = "La fecha de finalización es obligatorio")]
         [Display(Name = "Fecha de finalización")]
-        public DateOnly FechaFin { get; set; }
+        public DateTime FechaFin { get; set; }
 
         [Required (ErrorMessage = "El precio es obligatorio")]
         [Display(Name = "Monto mensual")]

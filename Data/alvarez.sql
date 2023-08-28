@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-08-2023 a las 06:36:14
+-- Tiempo de generación: 28-08-2023 a las 04:25:37
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `contrato` (
   `Id` int(11) NOT NULL,
-  `FechaInicio` date NOT NULL,
-  `FechaFin` date NOT NULL,
+  `FechaInicio` datetime NOT NULL,
+  `FechaFin` datetime NOT NULL,
   `Alquiler` decimal(10,0) NOT NULL,
   `InmuebleId` int(11) NOT NULL,
   `InquilinoId` int(11) NOT NULL,
@@ -42,8 +42,7 @@ CREATE TABLE `contrato` (
 --
 
 INSERT INTO `contrato` (`Id`, `FechaInicio`, `FechaFin`, `Alquiler`, `InmuebleId`, `InquilinoId`, `Estado`) VALUES
-(1, '2023-09-01', '2024-09-01', 100000, 1, 1, 'Vigente'),
-(2, '2023-03-01', '2024-03-01', 86000, 3, 6, 'Vigente');
+(7, '2023-08-01 00:00:00', '2024-08-01 00:00:00', 75000, 4, 4, 'Vigente');
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,7 @@ CREATE TABLE `inmueble` (
 --
 
 INSERT INTO `inmueble` (`Id`, `Direccion`, `Uso`, `Tipo`, `Ambientes`, `Latitud`, `Longitud`, `Estado`, `Precio`, `PropietarioId`) VALUES
-(1, 'Alsina 325 San Luis', 1, 1, 5, 999.99999, -999.99999, 2, 100000.00, 1),
+(1, 'Alsina 325 San Luis', 1, 1, 3, 999.99999, -999.99999, 2, 100000.00, 1),
 (3, 'Lafinur 488 San Luis', 2, 3, 1, 11.66000, -78.82000, 1, 86000.00, 3),
 (4, 'Lavalle 293 P 1° B San Luis', 1, 2, 2, 999.99999, -58.32010, 1, 75000.00, 9);
 
@@ -97,7 +96,7 @@ INSERT INTO `inquilino` (`Id`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email`)
 (3, 'Ariel', 'Montoya', '13890753', '0266-4058661', 'arielmontoya@gmail.com'),
 (4, 'Rodrigo ', 'Diaz', '38454663', '0266-4058098', 'rodrigodiaz@gmail.com'),
 (5, 'Oscar ', 'Moran', '16685614', '0266-4051446', 'oscarmoran@gmail.com'),
-(6, 'Marcela', 'Ramirez', '34456988', '02664076969', 'marcelaramirez@gmail.com');
+(6, 'Marcela', 'Ramirez', '34456988', '0266-4076969', 'marcelaramirez@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -167,7 +166,7 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
