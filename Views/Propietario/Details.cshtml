@@ -1,48 +1,54 @@
 @model AlvarezInmobiliaria.Models.Propietario
 
 @{
-	ViewData["Title"] = "Detalles";
+	ViewData["Title"] = "Detalles del propietario";
 }
 
 <div class="d-flex align-items-center justify-content-between">
 	<h1>Detalle del propietario</h1>
 </div>
+</div>
 
 <hr />
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="Edit">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			@Html.HiddenFor(model => model.Id)
-            <div class="form-group">
-				<label asp-for="Nombre" class="control-label"></label>
-				<input asp-for="Nombre" class="form-control" readonly/>
-				<span asp-validation-for="Nombre" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Apellido" class="control-label"></label>
-				<input asp-for="Apellido" class="form-control" readonly/>
-				<span asp-validation-for="Apellido" class="text-danger"></span>
-			</div>
-            <div class="form-group">
-				<label asp-for="Dni" class="control-label"></label>
-				<input asp-for="Dni" class="form-control"readonly/>
-				<span asp-validation-for="Dni" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Telefono" class="control-label"></label>
-				<input asp-for="Telefono" class="form-control"readonly/>
-				<span asp-validation-for="Telefono" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Email" class="control-label"></label>
-				<input asp-for="Email" class="form-control"readonly />
-				<span asp-validation-for="Email" class="text-danger"></span>
-			</div>
-			<br />
-			<div class="form-group">
-    			<a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i>Volver al listado</a>
-			</div>
-		</form>
-	</div>
+<div class="container">
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Id)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Id)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Nombre)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Nombre)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Apellido)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Apellido)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Dni)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Dni)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Telefono)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Telefono)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Email)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Email)
+		</dd>
+	</dl>
+	<a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle-fill"></i>Volver al listado</a>
+	<a href='@Url.Action("Edit", new {id = Model.Id})' class="btn btn-success"><i class="bi bi-pencil">Editar</i></a> 
 </div>
