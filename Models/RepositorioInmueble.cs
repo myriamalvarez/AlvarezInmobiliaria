@@ -1,4 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
 using MySql.Data.MySqlClient;
 
 namespace AlvarezInmobiliaria.Models;
@@ -37,7 +36,7 @@ public class RepositorioInmueble
                         Ambientes = reader.GetInt32("Ambientes"),
                         Latitud = reader.GetDecimal("Latitud"),
                         Longitud = reader.GetDecimal("Longitud"),
-                        Estado = reader.GetInt32("Estado"),
+                        Estado = reader.GetBoolean("Estado"),
                         Precio = reader.GetDecimal("Precio"),
                         PropietarioId = reader.GetInt32("PropietarioId"),
                         Propietario = new Propietario
@@ -155,7 +154,7 @@ public class RepositorioInmueble
                             Ambientes = reader.GetInt32("ambientes"),
                             Latitud = reader.GetDecimal("latitud"),
                             Longitud = reader.GetDecimal("longitud"),
-                            Estado = reader.GetInt32("estado"),
+                            Estado = reader.GetBoolean("estado"),
                             Precio = reader.GetDecimal("precio"),
                             PropietarioId = reader.GetInt32("propietarioId"),
                             Propietario = new Propietario

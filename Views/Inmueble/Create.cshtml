@@ -55,11 +55,8 @@
                 <div class="form-group">
                     <label asp-for="Estado" class="control-label">Estado</label>
                     <select class="form-control" name="Estado">
-                        <option value="" selected disabled>Selccione un estado...</option>
-                            @foreach (var estado in (IDictionary<int, string>)ViewBag.estados)
-                                {
-                                    <option value="@estado.Key">@estado.Value</option>
-                                }
+                        <option value="true" selected>Disponible</option>
+                        <option value="false">No Disponible</option>          
                     </select>
                     <span asp-validation-for="Estado" class="text-danger"></span>
                 </div>

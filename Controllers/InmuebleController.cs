@@ -32,7 +32,6 @@ public class InmuebleController : Controller
     {
        ViewBag.usos = Inmueble.ObtenerUsos();
        ViewBag.tipos = Inmueble.ObtenerTipos();
-       ViewBag.estados = Inmueble.ObtenerEstados();
        ViewBag.propietarios = repositorioPropietario.ObtenerPropietarios();
 
        return View();
@@ -52,7 +51,6 @@ public class InmuebleController : Controller
         {
             ViewBag.usos = Inmueble.ObtenerUsos();
             ViewBag.tipos = Inmueble.ObtenerTipos();
-            ViewBag.estados = Inmueble.ObtenerEstados();
             int res = repositorio.Alta(inmueble);
             if (res != 0)
             {
@@ -77,7 +75,6 @@ public class InmuebleController : Controller
         var inmueble = repositorio.ObtenerPorId(id);
         ViewBag.usos = Inmueble.ObtenerUsos();
         ViewBag.tipos = Inmueble.ObtenerTipos();
-        ViewBag.estados = Inmueble.ObtenerEstados();
         ViewBag.propietarios = repositorioPropietario.ObtenerPropietarios();
         return View(inmueble);
     }
@@ -97,7 +94,6 @@ public class InmuebleController : Controller
             TempData["Error"] = ex.Message;
             ViewBag.usos = Inmueble.ObtenerUsos();
             ViewBag.tipos = Inmueble.ObtenerTipos();
-            ViewBag.estados = Inmueble.ObtenerEstados();
             ViewBag.propietarios = repositorioPropietario.ObtenerPropietarios();
             return View(inmueble);
         }

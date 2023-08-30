@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Options;
 
 namespace AlvarezInmobiliaria.Models;
 
@@ -16,13 +15,6 @@ public enum enTipos
     Local = 3,
     Oficina = 4,
     Deposito = 5,
-}
-
-public enum enEstados
-{
-    Disponible = 1,
-    Alquilado = 2,
-    Suspendido = 3,
 }
 
 public class Inmueble
@@ -44,13 +36,15 @@ public class Inmueble
 
     public decimal Longitud { get; set; } 
 
-    public int Estado { get; set; } = 0;
+    public bool Estado { get; set; } = true;
 
     public decimal Precio { get; set;}
 
     [Display(Name = "Propietario")]
     public int PropietarioId { get; set;}
     public Propietario? Propietario { get; set;}
+
+    public string? EstadoNombre => Estado == true ? "Disponible" : "No Disponible";
 
     public string UsoNombre => Uso > 0 ? ((enUsos)Uso).ToString() : "";
 
@@ -76,19 +70,6 @@ public class Inmueble
             tipos.Add((int)valor, Enum.GetName(tipoEnumTipo, valor)!);
         }
         return tipos;
-    }
-
-    public string EstadoNombre => Estado > 0 ? ((enEstados)Estado).ToString() : "";
-
-    public static IDictionary<int, string> ObtenerEstados()
-    {
-        SortedDictionary<int, string> estados = new SortedDictionary<int, string>();
-        Type tipoEnumEst = typeof(enEstados);
-        foreach (var valor in Enum.GetValues(tipoEnumEst))
-        {
-            estados.Add((int)valor, Enum.GetName(tipoEnumEst, valor)!);
-        }
-        return estados;
     }
 
 }
