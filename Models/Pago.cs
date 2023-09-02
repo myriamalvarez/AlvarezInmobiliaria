@@ -10,7 +10,7 @@ namespace AlvarezInmobiliaria.Models
         
         [Display(Name = "N° de Pago")]
         public int NumeroPago { get; set; }
-
+        
         [Required]
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }

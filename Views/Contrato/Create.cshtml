@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Alquiler" class="control-label"></label>
-                <input asp-for="Alquiler" class="form-control" placeholder="Monto del alquiler"/>
+                <input asp-for="Alquiler" type="number" step="0.01" class="form-control" placeholder="Monto del alquiler"/>
                 <span asp-validation-for="Alquiler" class="text-danger"></span>
             </div>
             <div class="form-group">
