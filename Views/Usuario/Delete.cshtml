@@ -1,33 +1,27 @@
-@model AlvarezInmobiliaria.Models.Pago
+@model AlvarezInmobiliaria.Models.Usuario
 @{
     ViewData["Title"] = "Eliminar";
 }
 <div class="d-flex align-items-center justify-content-between">
-    <h1>Eliminar pago</h1>
+    <h1>Eliminar Usuario</h1>
 </div>
 <div class="detail-container"></div>
 <hr />
 <p>
-    <strong>@Html.DisplayNameFor(model => model.NumeroPago): </strong>
-    @Html.DisplayFor(model => model.NumeroPago)
+    <strong>@Html.DisplayNameFor(model => model.Nombre): </strong>
+    @Html.DisplayFor(model => model.Nombre)
 </p>
 <p>
-    <strong>@Html.DisplayNameFor(model => model.Fecha): </strong>
-    @Html.DisplayFor(model => model.Fecha)
+    <strong>@Html.DisplayNameFor(model => model.Apellido): </strong>
+    @Html.DisplayFor(model => model.Apellido)
 </p>
 <p>
-    <strong>@Html.DisplayNameFor(model => model.Importe): </strong>
-    @Html.DisplayFor(model => model.Importe)
+    <strong>@Html.DisplayNameFor(model => model.Email): </strong>
+    @Html.DisplayFor(model => model.Email)
 </p>
 <p>
-    <strong>Inquilino: </strong>
-    @if(Model.Contrato!.Inquilino != null){
-				@(Model.Contrato.Inquilino.ToString())}
-</p>
-<p>
-    <strong>Inmueble: </strong>
-    @if(Model.Contrato!.Inmueble != null){
-				@(Model.Contrato.Inmueble.Direccion)}
+    <strong>@Html.DisplayNameFor(model => model.Rol): </strong>
+    @Html.DisplayFor(model => model.RolNombre)
 </p>
 	<br/>
 	<form asp-action="Delete" id="deleteForm" asp-route-id="@Model.Id">
@@ -42,7 +36,7 @@
 			e.preventDefault();
 			swal({
 				title: 'Eliminar',
-				text: 'Esta seguro que desea cancelar este pago?',
+				text: 'Esta seguro que desea cancelar este usuario?',
 				icon: 'warning',
 				buttons: ["Cancelar", "Ok"],
 				dangerMode: true,

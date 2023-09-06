@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AlvarezInmobiliaria.Models
 {
-    public class Inquilino    
+    public class Inquilino
     {
         [Display(Name = "Código")]
         public int Id { get; set; }
@@ -32,8 +32,3 @@ namespace AlvarezInmobiliaria.Models
         public override string ToString() => $"{Nombre} {Apellido}";
     }
 }
-
-
-
-
-

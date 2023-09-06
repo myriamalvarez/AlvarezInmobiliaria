@@ -26,7 +26,7 @@ public class Inmueble
     [Required(ErrorMessage = "Campo obligatorio")]
     public string Direccion { get; set; } = "";
 
-    public int Uso { get; set; } = 0;  
+    public int Uso { get; set; } = 0;
 
     public int Tipo { get; set; } = 0;
 
@@ -34,15 +34,15 @@ public class Inmueble
 
     public decimal Latitud { get; set; }
 
-    public decimal Longitud { get; set; } 
+    public decimal Longitud { get; set; }
 
     public bool Estado { get; set; } = true;
 
-    public decimal Precio { get; set;}
+    public decimal Precio { get; set; }
 
     [Display(Name = "Propietario")]
-    public int PropietarioId { get; set;}
-    public Propietario? Propietario { get; set;}
+    public int PropietarioId { get; set; }
+    public Propietario? Propietario { get; set; }
 
     public string? EstadoNombre => Estado == true ? "Disponible" : "No Disponible";
 
@@ -71,5 +71,4 @@ public class Inmueble
         }
         return tipos;
     }
-
 }

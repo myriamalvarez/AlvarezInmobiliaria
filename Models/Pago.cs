@@ -7,10 +7,10 @@ namespace AlvarezInmobiliaria.Models
     {
         [Display(Name = "Código")]
         public int Id { get; set; }
-        
+
         [Display(Name = "N° de Pago")]
         public int NumeroPago { get; set; }
-        
+
         [Required]
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }
@@ -22,6 +22,5 @@ namespace AlvarezInmobiliaria.Models
         public int ContratoId { get; set; }
 
         public Contrato? Contrato { get; set; }
-
     }
 }

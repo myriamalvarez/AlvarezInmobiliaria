@@ -33,23 +33,23 @@ public class InquilinoController : Controller
     [HttpPost]
     public ActionResult Create(Inquilino inquilino)
     {
-        if(!ModelState.IsValid) 
+        if (!ModelState.IsValid)
         {
             return View();
         }
         try
         {
-           int res = repositorio.Alta(inquilino);
-           if (res > 0) 
-           {
-            TempData["Success"] = "Inquilino creado con exito!";
-            return RedirectToAction("Index");
-           }
-           else
-           {
-            TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
-            return RedirectToAction("Create");
-           }
+            int res = repositorio.Alta(inquilino);
+            if (res > 0)
+            {
+                TempData["Success"] = "Inquilino creado con exito!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
+                return RedirectToAction("Create");
+            }
         }
         catch (Exception ex)
         {
@@ -66,8 +66,8 @@ public class InquilinoController : Controller
 
     public ActionResult Edit(int id)
     {
-            var inquilino = repositorio.ObtenerPorId(id);
-            return View(inquilino);
+        var inquilino = repositorio.ObtenerPorId(id);
+        return View(inquilino);
     }
 
     [HttpPost]
@@ -85,11 +85,13 @@ public class InquilinoController : Controller
             return View();
         }
     }
+
     public ActionResult Delete(int id)
     {
         var inquilino = repositorio.ObtenerPorId(id);
         return View(inquilino);
     }
+
     [HttpPost]
     public ActionResult Delete(int id, Inquilino inquilino)
     {
@@ -104,7 +106,5 @@ public class InquilinoController : Controller
             TempData["Error"] = ex.Message;
             return View(inquilino);
         }
-
     }
-
 }

@@ -39,7 +39,7 @@ public class PagoController : Controller
         }
         try
         {
-            if(pago?.NumeroPago == null || pago.NumeroPago == 0)
+            if (pago?.NumeroPago == null || pago.NumeroPago == 0)
             {
                 pago!.NumeroPago = 1;
             }
@@ -47,17 +47,17 @@ public class PagoController : Controller
             {
                 pago.NumeroPago++;
             }
-           int res = repositorio.Alta(pago);
-           if (res != 0) 
-           {
-            TempData["Success"] = "Pago creado con exito!";
-            return RedirectToAction("Index");
-           }
-           else
-           {
-            TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
-            return RedirectToAction("Create");
-           }
+            int res = repositorio.Alta(pago);
+            if (res != 0)
+            {
+                TempData["Success"] = "Pago creado con exito!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
+                return RedirectToAction("Create");
+            }
         }
         catch (Exception ex)
         {
@@ -100,6 +100,7 @@ public class PagoController : Controller
         var pago = repositorio.ObtenerPorId(id);
         return View(pago);
     }
+
     [HttpPost]
     public ActionResult Delete(int id, Pago pago)
     {
@@ -114,7 +115,5 @@ public class PagoController : Controller
             TempData["Error"] = ex.Message;
             return View(pago);
         }
-
     }
-
-} 
+}

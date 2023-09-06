@@ -22,36 +22,38 @@ public class RepositorioPropietario
             {
                 conn.Open();
                 using (MySqlDataReader reader = cmd.ExecuteReader())
-                   {
+                {
                     while (reader.Read())
                     {
-                        res.Add(new Propietario
-                        {
-                            Id = reader.GetInt32("Id"),
-                            Nombre = reader.GetString("Nombre"),
-                            Apellido = reader.GetString("Apellido"),
-                            Dni = reader.GetString("Dni"),
-                            Telefono = reader.GetString("Telefono"),
-                            Email = reader.GetString("Email"),
-                        });
+                        res.Add(
+                            new Propietario
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                                Dni = reader.GetString("Dni"),
+                                Telefono = reader.GetString("Telefono"),
+                                Email = reader.GetString("Email"),
+                            }
+                        );
                     }
-                   } 
-                   conn.Close();
-            } 
+                }
+                conn.Close();
+            }
         }
-            return res;
+        return res;
     }
-    
 
     public int Alta(Propietario propietario)
     {
-         var res = -1;
-         using(MySqlConnection conn = new MySqlConnection(connectionString))
-         {
-            var query = @"INSERT INTO propietario (Nombre, Apellido, Dni, Telefono, Email)
+        var res = -1;
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"INSERT INTO propietario (Nombre, Apellido, Dni, Telefono, Email)
                           VALUES(@Nombre, @Apellido, @Dni, @Telefono, @Email);
                           SELECT LAST_INSERT_ID()";
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@Nombre", propietario.Nombre);
                 cmd.Parameters.AddWithValue("@Apellido", propietario.Apellido);
@@ -63,8 +65,8 @@ public class RepositorioPropietario
                 propietario.Id = res;
                 conn.Close();
             }
-         }
-         return res;
+        }
+        return res;
     }
 
     public int Baja(int id)
@@ -87,23 +89,23 @@ public class RepositorioPropietario
     public int Modificacion(Propietario propietario)
     {
         int res = 0;
-        using(MySqlConnection conn = new MySqlConnection(connectionString))
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
-            var query = @"UPDATE propietario SET Nombre = @nombre, Apellido = @apellido, Dni = @dni, Telefono = @telefono, Email = @email
+            var query =
+                @"UPDATE propietario SET Nombre = @nombre, Apellido = @apellido, Dni = @dni, Telefono = @telefono, Email = @email
                         WHERE Id = @id;";
 
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-               
-               cmd.Parameters.AddWithValue("@nombre", propietario.Nombre);
-               cmd.Parameters.AddWithValue("@apellido", propietario.Apellido);
-               cmd.Parameters.AddWithValue("@dni", propietario.Dni);
-               cmd.Parameters.AddWithValue("@telefono", propietario.Telefono);
-               cmd.Parameters.AddWithValue("@email", propietario.Email);
-               cmd.Parameters.AddWithValue("@id", propietario.Id);
-               conn.Open();
-               res = cmd.ExecuteNonQuery();
-               conn.Close(); 
+                cmd.Parameters.AddWithValue("@nombre", propietario.Nombre);
+                cmd.Parameters.AddWithValue("@apellido", propietario.Apellido);
+                cmd.Parameters.AddWithValue("@dni", propietario.Dni);
+                cmd.Parameters.AddWithValue("@telefono", propietario.Telefono);
+                cmd.Parameters.AddWithValue("@email", propietario.Email);
+                cmd.Parameters.AddWithValue("@id", propietario.Id);
+                conn.Open();
+                res = cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
         return res;
@@ -112,21 +114,22 @@ public class RepositorioPropietario
     public Propietario ObtenerPorId(int id)
     {
         Propietario res = null!;
-        using(MySqlConnection conn = new MySqlConnection(connectionString))
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
-            var query = "SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM propietario WHERE Id=@id";
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            var query =
+                "SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM propietario WHERE Id=@id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("id", id);
                 conn.Open();
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         res = new Propietario
                         {
-                            Id = reader.GetInt32("id"),
-                            Nombre = reader.GetString("nombre"),
+                            Id = reader.GetInt32("Id"),
+                            Nombre = reader.GetString("Nombre"),
                             Apellido = reader.GetString("Apellido"),
                             Dni = reader.GetString("Dni"),
                             Telefono = reader.GetString("Telefono"),
@@ -136,7 +139,7 @@ public class RepositorioPropietario
                 }
                 conn.Close();
             }
-        } 
+        }
         return res!;
     }
 }

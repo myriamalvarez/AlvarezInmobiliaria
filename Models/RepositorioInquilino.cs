@@ -22,36 +22,38 @@ public class RepositorioInquilino
             {
                 conn.Open();
                 using (MySqlDataReader reader = cmd.ExecuteReader())
-                   {
+                {
                     while (reader.Read())
                     {
-                        res.Add(new Inquilino
-                        {
-                            Id = reader.GetInt32("Id"),
-                            Nombre = reader.GetString("Nombre"),
-                            Apellido = reader.GetString("Apellido"),
-                            Dni = reader.GetString("Dni"),
-                            Telefono = reader.GetString("Telefono"),
-                            Email = reader.GetString("Email"),
-                        });
+                        res.Add(
+                            new Inquilino
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                                Dni = reader.GetString("Dni"),
+                                Telefono = reader.GetString("Telefono"),
+                                Email = reader.GetString("Email"),
+                            }
+                        );
                     }
-                   } 
-                   conn.Close();
-            } 
+                }
+                conn.Close();
+            }
         }
-            return res;
+        return res;
     }
-    
 
-    public int Alta(Inquilino inquilino) 
+    public int Alta(Inquilino inquilino)
     {
-         var res = -1;
-         using(MySqlConnection conn = new MySqlConnection(connectionString))
-         {
-            var query = @"INSERT INTO inquilino (Nombre, Apellido, Dni, Telefono, Email)
+        var res = -1;
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"INSERT INTO inquilino (Nombre, Apellido, Dni, Telefono, Email)
                           VALUES(@Nombre, @Apellido, @Dni, @Telefono, @Email);
                           SELECT LAST_INSERT_ID()";
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@Nombre", inquilino.Nombre);
                 cmd.Parameters.AddWithValue("@Apellido", inquilino.Apellido);
@@ -63,8 +65,8 @@ public class RepositorioInquilino
                 inquilino.Id = res;
                 conn.Close();
             }
-         }
-         return res;
+        }
+        return res;
     }
 
     public int Baja(int id)
@@ -87,23 +89,23 @@ public class RepositorioInquilino
     public int Modificacion(Inquilino inquilino)
     {
         int res = -1;
-        using(MySqlConnection conn = new MySqlConnection(connectionString))
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
-            var query = @"UPDATE inquilino SET Nombre = @nombre, Apellido = @apellido, Dni = @dni, Telefono = @telefono, Email = @email
+            var query =
+                @"UPDATE inquilino SET Nombre = @nombre, Apellido = @apellido, Dni = @dni, Telefono = @telefono, Email = @email
                         WHERE Id = @id;";
 
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-               
-               cmd.Parameters.AddWithValue("@nombre", inquilino.Nombre);
-               cmd.Parameters.AddWithValue("apellido", inquilino.Apellido);
-               cmd.Parameters.AddWithValue("@dni", inquilino.Dni);
-               cmd.Parameters.AddWithValue("@telefono", inquilino.Telefono);
-               cmd.Parameters.AddWithValue("@email", inquilino.Email);
-               cmd.Parameters.AddWithValue("@id", inquilino.Id);
-               conn.Open();
-               res = cmd.ExecuteNonQuery();
-               conn.Close(); 
+                cmd.Parameters.AddWithValue("@nombre", inquilino.Nombre);
+                cmd.Parameters.AddWithValue("apellido", inquilino.Apellido);
+                cmd.Parameters.AddWithValue("@dni", inquilino.Dni);
+                cmd.Parameters.AddWithValue("@telefono", inquilino.Telefono);
+                cmd.Parameters.AddWithValue("@email", inquilino.Email);
+                cmd.Parameters.AddWithValue("@id", inquilino.Id);
+                conn.Open();
+                res = cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
         return res;
@@ -112,14 +114,15 @@ public class RepositorioInquilino
     public Inquilino ObtenerPorId(int id)
     {
         Inquilino res = null!;
-        using(MySqlConnection conn = new MySqlConnection(connectionString))
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
-            var query = "SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM inquilino WHERE Id=@id";
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
+            var query =
+                "SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM inquilino WHERE Id=@id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("id", id);
                 conn.Open();
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
@@ -136,7 +139,7 @@ public class RepositorioInquilino
                 }
                 conn.Close();
             }
-        } 
+        }
         return res!;
     }
 }

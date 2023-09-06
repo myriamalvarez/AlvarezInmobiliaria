@@ -32,11 +32,10 @@ public class ContratoController : Controller
 
     public ActionResult Create()
     {
-       ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
-       ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
+        ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
+        ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
 
-       return View();
-
+        return View();
     }
 
     [HttpPost]
@@ -64,7 +63,7 @@ public class ContratoController : Controller
                 return RedirectToAction("Create");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             TempData["Error"] = ex.Message;
             return RedirectToAction("Index");
@@ -76,7 +75,7 @@ public class ContratoController : Controller
         var contrato = repositorio.ObtenerPorId(id);
         ViewBag.Inmuebles = repositorioInmueble.ObtenerInmueblesDisponibles();
         ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
-    
+
         return View(contrato);
     }
 
@@ -107,6 +106,7 @@ public class ContratoController : Controller
         var contrato = repositorio.ObtenerPorId(id);
         return View(contrato);
     }
+
     [HttpPost]
     public ActionResult Delete(int id, Contrato contrato)
     {
@@ -121,7 +121,5 @@ public class ContratoController : Controller
             TempData["Error"] = ex.Message;
             return View(contrato);
         }
-
     }
-
 }

@@ -1,0 +1,54 @@
+@model AlvarezInmobiliaria.Models.Usuario
+
+@{
+	ViewData["Title"] = "Detalles del usuario";
+}
+
+<div class="d-flex align-items-center justify-content-between">
+	<h1>Detalle del usuario</h1>
+</div>
+</div>
+
+<hr />
+<div class="container">
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Id)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Id)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Nombre)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Nombre)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Apellido)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Apellido)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Avatar)
+		</dt>
+		<dd class="col-md-10">
+			<img src="@Model.Avatar" width="80px" style="border-radius: 20px;">
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Email)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.Email)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Rol)
+		</dt>
+		<dd class="col-md-10">
+			@Html.DisplayFor(model => model.RolNombre)
+		</dd>
+	</dl>
+	<a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle-fill"></i>Volver al listado</a>
+	 
+</div>

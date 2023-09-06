@@ -36,17 +36,17 @@ public class PropietarioController : Controller
         }
         try
         {
-           int res = repositorio.Alta(propietario);
-           if (res != 0) 
-           {
-            TempData["Success"] = "Propietario creado con exito!";
-            return RedirectToAction("Index");
-           }
-           else
-           {
-            TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
-            return RedirectToAction("Create");
-           }
+            int res = repositorio.Alta(propietario);
+            if (res != 0)
+            {
+                TempData["Success"] = "Propietario creado con exito!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Error"] = "Hubo un error al intentar dar el alta. Intentelo nuevamente";
+                return RedirectToAction("Create");
+            }
         }
         catch (Exception ex)
         {
@@ -64,8 +64,8 @@ public class PropietarioController : Controller
 
     public ActionResult Edit(int id)
     {
-            var propietario = repositorio.ObtenerPorId(id);
-            return View(propietario);
+        var propietario = repositorio.ObtenerPorId(id);
+        return View(propietario);
     }
 
     [HttpPost]
@@ -83,11 +83,13 @@ public class PropietarioController : Controller
             return View();
         }
     }
+
     public ActionResult Delete(int id)
     {
         var propietario = repositorio.ObtenerPorId(id);
         return View(propietario);
     }
+
     [HttpPost]
     public ActionResult Delete(int id, Propietario propietario)
     {
@@ -102,7 +104,5 @@ public class PropietarioController : Controller
             TempData["Error"] = ex.Message;
             return View(propietario);
         }
-
     }
-
 }

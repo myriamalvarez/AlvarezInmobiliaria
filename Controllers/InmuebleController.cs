@@ -30,12 +30,11 @@ public class InmuebleController : Controller
 
     public ActionResult Create()
     {
-       ViewBag.usos = Inmueble.ObtenerUsos();
-       ViewBag.tipos = Inmueble.ObtenerTipos();
-       ViewBag.propietarios = repositorioPropietario.ObtenerPropietarios();
+        ViewBag.usos = Inmueble.ObtenerUsos();
+        ViewBag.tipos = Inmueble.ObtenerTipos();
+        ViewBag.propietarios = repositorioPropietario.ObtenerPropietarios();
 
-       return View();
-
+        return View();
     }
 
     [HttpPost]
@@ -63,7 +62,7 @@ public class InmuebleController : Controller
                 return RedirectToAction("Create");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             TempData["Error"] = ex.Message;
             return RedirectToAction("Index");
@@ -104,6 +103,7 @@ public class InmuebleController : Controller
         var inmueble = repositorio.ObtenerPorId(id);
         return View(inmueble);
     }
+
     [HttpPost]
     public ActionResult Delete(int id, Inmueble inmueble)
     {
@@ -118,7 +118,5 @@ public class InmuebleController : Controller
             TempData["Error"] = ex.Message;
             return View(inmueble);
         }
-
     }
-
 }
