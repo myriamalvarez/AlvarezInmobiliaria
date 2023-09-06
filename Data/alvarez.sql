@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-09-2023 a las 06:42:45
+-- Tiempo de generación: 06-09-2023 a las 17:28:54
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -156,6 +156,34 @@ INSERT INTO `propietario` (`Id`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email
 (9, 'Jose', 'Romano', '35455278', '0266-4356814', 'joseromano@gmail.com'),
 (11, 'Adriana', 'Gomez', '25889242', '0266-4548800', 'adrianagomez@gmail.com');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `Id` int(11) NOT NULL,
+  `Nombre` varchar(30) NOT NULL,
+  `Apellido` varchar(30) NOT NULL,
+  `Avatar` varchar(100) DEFAULT NULL,
+  `Email` varchar(50) NOT NULL,
+  `Clave` varchar(100) NOT NULL,
+  `Rol` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Avatar`, `Email`, `Clave`, `Rol`) VALUES
+(2, 'Myriam', 'Alvarez', '/img/avatarDefault.png', 'myriamalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(3, 'Luis', 'Alvarez', '/avatar\\usuario_3.jpg', 'luisalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(4, 'Luisa', 'Alvarez', '/avatar\\usuario_4.jpg', 'luisaalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(5, 'Juan', 'Perez', '/avatar\\usuario_5.jpg', 'juanperez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
+(6, 'Carlos', 'Merlo', '/avatar\\usuario_6.jpg', 'carlosmerlo@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(7, 'aaaa', 'aaa', '/img/avatarDefault.png', 'aaa@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1);
+
 --
 -- Índices para tablas volcadas
 --
@@ -195,6 +223,12 @@ ALTER TABLE `propietario`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -227,6 +261,12 @@ ALTER TABLE `pago`
 --
 ALTER TABLE `propietario`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
