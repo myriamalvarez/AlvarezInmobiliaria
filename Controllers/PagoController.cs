@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -17,6 +18,7 @@ public class PagoController : Controller
         this.repositorioContrato = new RepositorioContrato();
     }
 
+    [Authorize]
     public ActionResult Index()
     {
         List<Pago> lista = repositorio.ObtenerPagos();
@@ -24,6 +26,7 @@ public class PagoController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult Create()
     {
         ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -31,6 +34,8 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Create(Pago pago)
     {
         if (!ModelState.IsValid)
@@ -66,6 +71,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize]
     public ActionResult Details(int id)
     {
         ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -73,7 +79,8 @@ public class PagoController : Controller
         return View(pago);
     }
 
-    /*public ActionResult Edit(int id)
+    [Authorize]
+    public ActionResult Edit(int id)
     {
             var pago = repositorio.ObtenerPorId(id);
             ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -81,6 +88,8 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Edit(int id, Pago pago)
     {
         try
@@ -94,7 +103,9 @@ public class PagoController : Controller
             TempData["Error"] = ex.Message;
             return View();
         }
-    }*/
+    }
+
+    [Authorize(Policy ="Administrador")]
     public ActionResult Delete(int id)
     {
         var pago = repositorio.ObtenerPorId(id);
@@ -102,6 +113,7 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, Pago pago)
     {
         try

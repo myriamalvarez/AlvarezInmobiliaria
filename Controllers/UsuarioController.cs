@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers
 {
@@ -20,6 +21,7 @@ namespace AlvarezInmobiliaria.Controllers
             this.repositorio = new RepositorioUsuario();
         }
 
+        [Authorize(Policy ="Administrador")]
         public IActionResult Index()
         {
             var lista = repositorio.ObtenerUsuarios();
@@ -27,6 +29,7 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy ="Administrador")]
         public ActionResult Create()
         {
             ViewBag.Roles = Usuario.ObtenerRoles();
@@ -35,6 +38,7 @@ namespace AlvarezInmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy ="Administrador")]
         public ActionResult Create(Usuario usuario)
         {
             if(!ModelState.IsValid)
@@ -81,12 +85,93 @@ namespace AlvarezInmobiliaria.Controllers
             }
         }
 
+        [Authorize(Policy ="Administrador")]
+        public ActionResult Edit(int id)
+        {
+            var usuario = repositorio.ObtenerPorId(id);
+            ViewBag.Roles = Usuario.ObtenerRoles();
+            return View(usuario);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Edit(int id, Usuario usuario)
+        {
+            var vista = "Editar";
+            {
+                try
+                {
+                    var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+                    if (usuarioActual.Id != id && !User.IsInRole("Administrator"))//si no es admin, solo se modifica el mismo
+                    {
+                        return RedirectToAction(nameof(Index), "Home");
+                    }
+                    else
+                    {
+                        if(!User.IsInRole("Administrator"))
+                        {
+                            usuario.Rol = usuarioActual.Rol;
+                        }
+                        if(usuario.Clave != null)
+                        {
+                            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                password: usuario.Clave,
+                                salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
+                                prf: KeyDerivationPrf.HMACSHA1,
+                                iterationCount: 10000,
+                                numBytesRequested: 256 / 8));
+                                usuario.Clave = hashed;
+                        }
+                        else
+                        {
+                            usuario.Clave = usuarioActual.Clave;
+                        }
+
+                    if (usuario.AvatarFile != null)
+                    {
+                        string wwwPath = environment.WebRootPath;
+                        string path = Path.Combine(wwwPath, "avatar");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        string fileName = "usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
+                        string pathCompleto = Path.Combine(path, fileName);
+                        usuario.Avatar = Path.Combine("/avatar", fileName);
+                        using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                        {
+                            usuario.AvatarFile.CopyTo(stream);
+                        }
+                    }
+                    else
+                    {
+                        usuario.Avatar = usuarioActual.Avatar;
+                    }
+                    
+                        repositorio.Modificacion(usuario);
+                        TempData["success"] = "Usuario modificado correctamente";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    ViewBag.Roles = Usuario.ObtenerRoles();
+                    TempData["Error"] = ex.Message;
+                    return View(vista, usuario);
+                }
+            }
+        }
+
+        [Authorize]
         public ActionResult Details(int id)
         {
             var usuario = repositorio.ObtenerPorId(id);
             return View(usuario);
         }
 
+        [AllowAnonymous]
         public ActionResult Perfil()
         {
             ViewData["Title"] = "Mi perfil";
@@ -95,6 +180,7 @@ namespace AlvarezInmobiliaria.Controllers
             return View("Edit", usuario); //ver si uso misma vista
         }
 
+        [Authorize(Policy ="Administrador")]
         public ActionResult Delete(int id)
         {
             var usuario = repositorio.ObtenerPorId(id);
@@ -119,6 +205,7 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         //GET: Login
+        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             TempData["returnUrl"] = returnUrl;
