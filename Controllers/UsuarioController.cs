@@ -103,10 +103,16 @@ namespace AlvarezInmobiliaria.Controllers
                 try
                 {
                     var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
-                    var usuarioAEditar = repositorio.ObtenerPorMail(usuario.Email);
-                    if (usuarioActual.Id == id || User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
+                    if (usuarioActual.Id != id && !User.IsInRole("Administrator"))//si no es admin, solo se modifica el mismo
                     {
-                 
+                        return RedirectToAction(nameof(Index), "Home");
+                    }
+                    else
+                    {
+                        if(!User.IsInRole("Administrator"))
+                        {
+                            usuario.Rol = usuarioActual.Rol;
+                        }
                         if(usuario.Clave != null)
                         {
                             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -119,38 +125,34 @@ namespace AlvarezInmobiliaria.Controllers
                         }
                         else
                         {
-                            usuario.Clave = usuarioAEditar.Clave;
+                            usuario.Clave = usuarioActual.Clave;
                         }
 
-                        if (usuario.AvatarFile != null)
+                    if (usuario.AvatarFile != null)
+                    {
+                        string wwwPath = environment.WebRootPath;
+                        string path = Path.Combine(wwwPath, "avatar");
+                        if (!Directory.Exists(path))
                         {
-                            string wwwPath = environment.WebRootPath;
-                            string path = Path.Combine(wwwPath, "avatar");
-                            if (!Directory.Exists(path))
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-                            string fileName = "usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
-                            string pathCompleto = Path.Combine(path, fileName);
-                            usuario.Avatar = Path.Combine("/avatar", fileName);
-                            using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
-                            {
-                                usuario.AvatarFile.CopyTo(stream);
-                            }
+                            Directory.CreateDirectory(path);
                         }
-                        else
+                        string fileName = "usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
+                        string pathCompleto = Path.Combine(path, fileName);
+                        usuario.Avatar = Path.Combine("/avatar", fileName);
+                        using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
                         {
-                            usuario.Avatar = usuarioAEditar.Avatar;
+                            usuario.AvatarFile.CopyTo(stream);
                         }
+                    }
+                    else
+                    {
+                        usuario.Avatar = usuarioActual.Avatar;
+                    }
                     
                         
                         
                         TempData["success"] = "Usuario modificado correctamente";
                         return RedirectToAction(nameof(Index));
-                    }
-                    else
-                    {
-                       return RedirectToAction(nameof(Index), "Home"); 
                     }
                 }
 
