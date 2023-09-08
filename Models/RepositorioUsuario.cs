@@ -90,30 +90,7 @@ namespace AlvarezInmobiliaria.Models
             return res;
         }
 
-        public int ModificarPerfil(Usuario usuario)
-        {
-            int res = 0;
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                string query =
-                    @"UPDATE usuario SET Nombre = @nombre, Apellido = @apellido, Avatar = @avatar, Email = @email, Clave = @clave 
-                                 WHERE Id = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@nombre", usuario.Nombre);
-                    cmd.Parameters.AddWithValue("apellido", usuario.Apellido);
-                    cmd.Parameters.AddWithValue("@avatar", usuario.Avatar);
-                    cmd.Parameters.AddWithValue("email", usuario.Email);
-                    cmd.Parameters.AddWithValue("@clave", usuario.Clave);
-                    cmd.Parameters.AddWithValue("@id", usuario.Id);
-                    conn.Open();
-                    res = cmd.ExecuteNonQuery();
-                    conn.Close();
-                }
-            }
-            return res;
-        }
+        
 
         public List<Usuario> ObtenerUsuarios()
         {
@@ -216,6 +193,23 @@ namespace AlvarezInmobiliaria.Models
                 }
             }
             return res!;
+        }
+        public int CambiarClave(int id, string ClaveNueva)
+        {
+            int res = -1;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string querry = "UPDATE usuario SET Clave=@clave WHERE Id=@id";
+                using (MySqlCommand cmd = new MySqlCommand(querry, conn))
+                {
+                    cmd.Parameters.AddWithValue("@clave", ClaveNueva);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    res = cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            return res;
         }
     }
 }

@@ -143,7 +143,8 @@ namespace AlvarezInmobiliaria.Controllers
                             usuario.Avatar = usuarioAEditar.Avatar;
                         }
                     
-                        repositorio.Modificacion(usuario);
+                        
+                        
                         TempData["success"] = "Usuario modificado correctamente";
                         return RedirectToAction(nameof(Index));
                     }
@@ -175,7 +176,88 @@ namespace AlvarezInmobiliaria.Controllers
             ViewData["Title"] = "Mi perfil";
             var usuario = repositorio.ObtenerPorMail(User.Identity!.Name!);
             ViewBag.Roles = Usuario.ObtenerRoles();
-            return View("Edit", usuario); //ver si uso misma vista
+            return View("Details", usuario); 
+        }
+        [Authorize]
+        public ActionResult CambiarClave(int id)
+        {
+          var usuario = repositorio.ObtenerPorId(id);
+          return View("CambiarClave", usuario);  
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CambiarClave(int id, string ClaveNueva, string ClaveConfirmada)
+        {
+            if(!ModelState.IsValid)
+              return View();
+            
+            try
+            {
+                var usuario = repositorio.ObtenerPorId(id);
+
+                string hashNuevo = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: ClaveNueva,
+                    salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8));
+
+                string hashConfirmado = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: ClaveConfirmada,
+                    salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8));   
+
+                if(usuario.Id == id && hashNuevo == hashConfirmado)
+                {
+                    usuario.Clave = hashNuevo;
+                    repositorio.CambiarClave(id, hashNuevo);
+                    TempData["Success"] = "Contraseña modificada con exito!";
+                    return View("Details", usuario);
+                }
+                else
+                {
+                    TempData["Error"] = "Las contraseñas no coinciden.";
+                    return View("CambiarClave", usuario);
+                }                              
+            }catch(Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+        }
+
+        [Authorize]
+        public ActionResult CambiarAvatar(int id)
+        {
+            var usuario = repositorio.ObtenerPorId(id);
+            return View(usuario);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CambiarAvatar(int id, Usuario usuario)
+        {
+            var u = repositorio.ObtenerPorId(id);
+            string wwwPath = environment.WebRootPath;
+            string path = Path.Combine(wwwPath, "avatar");
+             if (!Directory.Exists(path))
+             {
+                Directory.CreateDirectory(path);
+             }
+             string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
+             string pathCompleto = Path.Combine(path, fileName);
+             u.Avatar = Path.Combine("/avatar", fileName);
+             using (FileStream fs = new FileStream(pathCompleto, FileMode.Create))
+             {
+                usuario.AvatarFile.CopyTo(fs);
+             }
+             repositorio.Modificacion(u);
+             TempData["success"] = "Imagen modificada correctamente";
+             return View("Details", u);
         }
 
         [Authorize(Policy ="Administrador")]
