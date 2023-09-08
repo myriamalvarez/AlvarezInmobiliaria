@@ -85,14 +85,12 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         @Html.HiddenFor(model => model.Id)
                         <div class="form-group">
-                            <label asp-for="ClaveNueva" class="control-label">Ingrese la nueva contraseña</label>
-                            <input asp-for="ClaveNueva" type="password" class="form-control" />
-                            <span asp-validation-for="ClaveNueva" class="text-danger"></span>
+                            <label class="control-label">Ingrese la nueva contraseña</label>
+                            <input name="ClaveNueva" type="password" class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label asp-for="ClaveConfirmada" class="control-label">Repita la nueva contraseña</label>
-                            <input asp-for="ClaveConfirmada" type="password" class="form-control" />
-                            <span asp-validation-for="ClaveConfirmada" class="text-danger"></span>
+                            <label class="control-label">Repita la nueva contraseña</label>
+                            <input name="ClaveConfirmada" type="password" class="form-control" />
                         </div>
                         <br />
                         <div class="form-group">

@@ -21,7 +21,6 @@ namespace AlvarezInmobiliaria.Controllers
             this.repositorio = new RepositorioUsuario();
         }
 
-        [Authorize(Policy ="Administrador")]
         public IActionResult Index()
         {
             var lista = repositorio.ObtenerUsuarios();
@@ -29,7 +28,6 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy ="Administrador")]
         public ActionResult Create()
         {
             ViewBag.Roles = Usuario.ObtenerRoles();
@@ -38,7 +36,6 @@ namespace AlvarezInmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy ="Administrador")]
         public ActionResult Create(Usuario usuario)
         {
             if(!ModelState.IsValid)
@@ -103,10 +100,16 @@ namespace AlvarezInmobiliaria.Controllers
                 try
                 {
                     var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
-                    var usuarioAEditar = repositorio.ObtenerPorMail(usuario.Email);
-                    if (usuarioActual.Id == id || User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
+                    if (usuarioActual.Id != id && !User.IsInRole("Administrator"))//si no es admin, solo se modifica el mismo
                     {
-                 
+                        return RedirectToAction(nameof(Index), "Home");
+                    }
+                    else
+                    {
+                        if(!User.IsInRole("Administrator"))
+                        {
+                            usuario.Rol = usuarioActual.Rol;
+                        }
                         if(usuario.Clave != null)
                         {
                             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -119,38 +122,33 @@ namespace AlvarezInmobiliaria.Controllers
                         }
                         else
                         {
-                            usuario.Clave = usuarioAEditar.Clave;
+                            usuario.Clave = usuarioActual.Clave;
                         }
 
-                        if (usuario.AvatarFile != null)
+                    if (usuario.AvatarFile != null)
+                    {
+                        string wwwPath = environment.WebRootPath;
+                        string path = Path.Combine(wwwPath, "avatar");
+                        if (!Directory.Exists(path))
                         {
-                            string wwwPath = environment.WebRootPath;
-                            string path = Path.Combine(wwwPath, "avatar");
-                            if (!Directory.Exists(path))
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-                            string fileName = "usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
-                            string pathCompleto = Path.Combine(path, fileName);
-                            usuario.Avatar = Path.Combine("/avatar", fileName);
-                            using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
-                            {
-                                usuario.AvatarFile.CopyTo(stream);
-                            }
+                            Directory.CreateDirectory(path);
                         }
-                        else
+                        string fileName = "usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
+                        string pathCompleto = Path.Combine(path, fileName);
+                        usuario.Avatar = Path.Combine("/avatar", fileName);
+                        using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
                         {
-                            usuario.Avatar = usuarioAEditar.Avatar;
+                            usuario.AvatarFile.CopyTo(stream);
                         }
-                    
-                        
-                        
-                        TempData["success"] = "Usuario modificado correctamente";
-                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                       return RedirectToAction(nameof(Index), "Home"); 
+                        usuario.Avatar = usuarioActual.Avatar;
+                    }
+                    
+                        repositorio.Modificacion(usuario);
+                        TempData["success"] = "Usuario modificado correctamente";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
 
@@ -170,7 +168,6 @@ namespace AlvarezInmobiliaria.Controllers
             return View(usuario);
         }
 
-        [AllowAnonymous]
         public ActionResult Perfil()
         {
             ViewData["Title"] = "Mi perfil";
@@ -178,40 +175,29 @@ namespace AlvarezInmobiliaria.Controllers
             ViewBag.Roles = Usuario.ObtenerRoles();
             return View("Details", usuario); 
         }
-        [Authorize]
-        public ActionResult CambiarClave(int id)
-        {
-          var usuario = repositorio.ObtenerPorId(id);
-          return View("CambiarClave", usuario);  
-        }
+
 
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CambiarClave(int id, string ClaveNueva, string ClaveConfirmada)
-        {
-            if(!ModelState.IsValid)
-              return View();
-            
+        {   
             try
             {
                 var usuario = repositorio.ObtenerPorId(id);
+                var hashNuevo = "";
+                if(ClaveNueva == ClaveConfirmada) 
+                {
+                        hashNuevo = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                        password: ClaveNueva,
+                        salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
+                        prf: KeyDerivationPrf.HMACSHA1,
+                        iterationCount: 10000,
+                        numBytesRequested: 256 / 8));
 
-                string hashNuevo = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                    password: ClaveNueva,
-                    salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
-                    prf: KeyDerivationPrf.HMACSHA1,
-                    iterationCount: 10000,
-                    numBytesRequested: 256 / 8));
+                }
 
-                string hashConfirmado = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                    password: ClaveConfirmada,
-                    salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
-                    prf: KeyDerivationPrf.HMACSHA1,
-                    iterationCount: 10000,
-                    numBytesRequested: 256 / 8));   
-
-                if(usuario.Id == id && hashNuevo == hashConfirmado)
+                if(usuario.Id == id)
                 {
                     usuario.Clave = hashNuevo;
                     repositorio.CambiarClave(id, hashNuevo);
@@ -221,19 +207,13 @@ namespace AlvarezInmobiliaria.Controllers
                 else
                 {
                     TempData["Error"] = "Las contraseñas no coinciden.";
-                    return View("CambiarClave", usuario);
+                    return View("Edit", usuario);
                 }                              
             }catch(Exception ex)
             {
                 TempData["Error"] = ex.Message;
+                return View("Edit");
             }
-        }
-
-        [Authorize]
-        public ActionResult CambiarAvatar(int id)
-        {
-            var usuario = repositorio.ObtenerPorId(id);
-            return View(usuario);
         }
 
         [Authorize]
@@ -248,7 +228,7 @@ namespace AlvarezInmobiliaria.Controllers
              {
                 Directory.CreateDirectory(path);
              }
-             string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile.FileName);
+             string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
              string pathCompleto = Path.Combine(path, fileName);
              u.Avatar = Path.Combine("/avatar", fileName);
              using (FileStream fs = new FileStream(pathCompleto, FileMode.Create))
@@ -260,7 +240,6 @@ namespace AlvarezInmobiliaria.Controllers
              return View("Details", u);
         }
 
-        [Authorize(Policy ="Administrador")]
         public ActionResult Delete(int id)
         {
             var usuario = repositorio.ObtenerPorId(id);
@@ -285,7 +264,6 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         //GET: Login
-        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             TempData["returnUrl"] = returnUrl;

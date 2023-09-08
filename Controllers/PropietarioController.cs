@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 using System.ComponentModel;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -16,7 +15,6 @@ public class PropietarioController : Controller
         this.repositorio = new RepositorioPropietario();
     }
 
-    [Authorize]
     public ActionResult Index()
     {
         List<Propietario> lista = repositorio.ObtenerPropietarios();
@@ -24,15 +22,12 @@ public class PropietarioController : Controller
     }
 
     [HttpGet]
-    [Authorize]
     public ActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    [Authorize]
     public ActionResult Create(Propietario propietario)
     {
         if (!ModelState.IsValid)
@@ -60,14 +55,13 @@ public class PropietarioController : Controller
         }
     }
 
-    [Authorize]
+    [ReadOnly(true)]
     public ActionResult Details(int id)
     {
         var propietario = repositorio.ObtenerPorId(id);
         return View(propietario);
     }
 
-    [Authorize]
     public ActionResult Edit(int id)
     {
         var propietario = repositorio.ObtenerPorId(id);
@@ -75,8 +69,6 @@ public class PropietarioController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    [Authorize]
     public ActionResult Edit(int id, Propietario propietario)
     {
         try
@@ -92,7 +84,6 @@ public class PropietarioController : Controller
         }
     }
 
-    [Authorize(Policy ="Administrador")]
     public ActionResult Delete(int id)
     {
         var propietario = repositorio.ObtenerPorId(id);
@@ -100,7 +91,6 @@ public class PropietarioController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, Propietario propietario)
     {
         try

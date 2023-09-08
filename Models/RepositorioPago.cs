@@ -106,16 +106,18 @@ namespace AlvarezInmobiliaria.Models
             return res;
         }
 
-        public int Modificacion(Pago pago)
+        /*public int Modificacion(Pago pago)
         {
             int res = 0;
             using(MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                var query = @"UPDATE pago SET Fecha = @fecha, Importe = @importe, ContratoId = @contratoId
+                var query = @"UPDATE pago SET NumeroPago = @numeroPago, Fecha = @fecha, Importe = @importe, ContratoId = @contratoId
                             WHERE Id = @id;";
     
                 using(MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                   
+                   cmd.Parameters.AddWithValue("@numeroPago", pago.NumeroPago);
                    cmd.Parameters.AddWithValue("@fecha", pago.Fecha);
                    cmd.Parameters.AddWithValue("@importe", pago.Importe);
                    cmd.Parameters.AddWithValue("@contratoId", pago.ContratoId);
@@ -126,7 +128,7 @@ namespace AlvarezInmobiliaria.Models
                 }
             }
             return res;
-        }
+        }*/
 
         public Pago ObtenerPorId(int id)
         {

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -17,21 +16,18 @@ public class InmuebleController : Controller
         this.repositorioPropietario = new RepositorioPropietario();
     }
 
-    [Authorize]
     public ActionResult Index()
     {
         var lista = repositorio.ObtenerInmuebles();
         return View(lista);
     }
 
-    [Authorize]
     public ActionResult Details(int id)
     {
         var inmueble = repositorio.ObtenerPorId(id);
         return View(inmueble);
     }
 
-    [Authorize]
     public ActionResult Create()
     {
         ViewBag.usos = Inmueble.ObtenerUsos();
@@ -43,7 +39,6 @@ public class InmuebleController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize]
     public ActionResult Create(Inmueble inmueble)
     {
         if (!ModelState.IsValid)
@@ -74,7 +69,6 @@ public class InmuebleController : Controller
         }
     }
 
-    [Authorize]
     public ActionResult Edit(int id)
     {
         var inmueble = repositorio.ObtenerPorId(id);
@@ -86,7 +80,6 @@ public class InmuebleController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize]
     public ActionResult Edit(int id, Inmueble inmueble)
     {
         try
@@ -105,7 +98,6 @@ public class InmuebleController : Controller
         }
     }
 
-    [Authorize(Policy = "Administrador")]
     public ActionResult Delete(int id)
     {
         var inmueble = repositorio.ObtenerPorId(id);
@@ -113,7 +105,6 @@ public class InmuebleController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, Inmueble inmueble)
     {
         try
