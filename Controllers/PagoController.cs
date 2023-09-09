@@ -73,7 +73,7 @@ public class PagoController : Controller
         return View(pago);
     }
 
-    /*public ActionResult Edit(int id)
+    public ActionResult Edit(int id)
     {
             var pago = repositorio.ObtenerPorId(id);
             ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -94,7 +94,7 @@ public class PagoController : Controller
             TempData["Error"] = ex.Message;
             return View();
         }
-    }*/
+    }
     public ActionResult Delete(int id)
     {
         var pago = repositorio.ObtenerPorId(id);

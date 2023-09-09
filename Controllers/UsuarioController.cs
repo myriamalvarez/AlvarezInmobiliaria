@@ -82,7 +82,7 @@ namespace AlvarezInmobiliaria.Controllers
             }
         }
 
-        [Authorize(Policy ="Administrador")]
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var usuario = repositorio.ObtenerPorId(id);
@@ -100,13 +100,13 @@ namespace AlvarezInmobiliaria.Controllers
                 try
                 {
                     var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
-                    if (usuarioActual.Id != id && !User.IsInRole("Administrator"))//si no es admin, solo se modifica el mismo
+                    if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
                     {
                         return RedirectToAction(nameof(Index), "Home");
                     }
                     else
                     {
-                        if(!User.IsInRole("Administrator"))
+                        if(!User.IsInRole("Administrador"))
                         {
                             usuario.Rol = usuarioActual.Rol;
                         }
@@ -176,6 +176,26 @@ namespace AlvarezInmobiliaria.Controllers
             return View("Details", usuario); 
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditarDatos(int id, string nombre, string apellido, string email,int rol)
+        {
+            try
+            {
+                repositorio.EditarDatos(id,nombre,apellido,email,rol); 
+                TempData["success"] = "Datos editados correctamente";
+                
+                    return RedirectToAction("Index");
+                
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+                return View("Edit");
+            }
+
+        }
 
         [Authorize]
         [HttpPost]
@@ -194,19 +214,22 @@ namespace AlvarezInmobiliaria.Controllers
                         prf: KeyDerivationPrf.HMACSHA1,
                         iterationCount: 10000,
                         numBytesRequested: 256 / 8));
-
-                }
-
-                if(usuario.Id == id)
-                {
                     usuario.Clave = hashNuevo;
                     repositorio.CambiarClave(id, hashNuevo);
                     TempData["Success"] = "Contraseña modificada con exito!";
+                    if( usuario.Id == id)
+                    {
                     return View("Details", usuario);
+                    }
+                    else
+                    {
+                        return View("Index");
+                    }
                 }
                 else
                 {
                     TempData["Error"] = "Las contraseñas no coinciden.";
+                    usuario.Clave = usuario.Clave;
                     return View("Edit", usuario);
                 }                              
             }catch(Exception ex)

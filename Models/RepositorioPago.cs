@@ -106,7 +106,7 @@ namespace AlvarezInmobiliaria.Models
             return res;
         }
 
-        /*public int Modificacion(Pago pago)
+        public int Modificacion(Pago pago)
         {
             int res = 0;
             using(MySqlConnection conn = new MySqlConnection(connectionString))
@@ -128,7 +128,7 @@ namespace AlvarezInmobiliaria.Models
                 }
             }
             return res;
-        }*/
+        }
 
         public Pago ObtenerPorId(int id)
         {

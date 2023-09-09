@@ -211,5 +211,25 @@ namespace AlvarezInmobiliaria.Models
             }
             return res;
         }
+        public int EditarDatos(int id, string nombre, string apellido, string email, int rol)
+        {
+            int res = -1;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string querry = "UPDATE usuario SET nombre=@nombre, apellido=@apellido, email=@email, rol=@rol WHERE id=@id";
+                using (MySqlCommand cmd = new MySqlCommand(querry, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@apellido", apellido);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@rol", rol);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    res = cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            return res;
+        }
     }
 }
