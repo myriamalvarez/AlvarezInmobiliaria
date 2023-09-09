@@ -209,6 +209,7 @@ namespace AlvarezInmobiliaria.Models
                     conn.Close();
                 }
             }
+
             return res;
         }
         public int EditarDatos(int id, string nombre, string apellido, string email, int rol)

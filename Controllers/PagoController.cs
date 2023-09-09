@@ -95,6 +95,26 @@ public class PagoController : Controller
             return View();
         }
     }
+
+    public ActionResult PagosPorContrato(int id)
+    {
+        try
+        {
+            Contrato contrato = repositorioContrato.ObtenerPorId(id);
+            ViewBag.desde = contrato;
+            var lista = repositorio.ObtenerPagosDelContrato(contrato);
+            if(lista.Count == 0)
+            {
+                TempData["Info"] = "El contrato no tiene pagos registrados";
+            }
+            return View("Index", lista);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View("Index");
+        }
+    }
     public ActionResult Delete(int id)
     {
         var pago = repositorio.ObtenerPorId(id);

@@ -181,5 +181,39 @@ namespace AlvarezInmobiliaria.Models
             }
             return res!;
         }
+
+        public IList<Pago> ObtenerPagosDelContrato(Contrato contrato)
+        {
+            IList<Pago> res = new List<Pago>();
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string query = @"SELECT p.Id, NumeroPago, Fecha, Importe, ContratoId, c.Id FROM pago p JOIN contrato c
+                                WHERE ContratoId = c.Id;";
+                using(MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    conn.Open();
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            res.Add(
+                                new Pago{
+                                    Id = reader.GetInt32("Id"),
+                                    NumeroPago = reader.GetInt32("NumeroPago"),
+                                    Fecha = reader.GetDateTime("Fecha"),
+                                    Importe = reader.GetDecimal("Importe"),
+                                    ContratoId = reader.GetInt32("ContratoId"),
+                                    Contrato = new Contrato
+                                    {
+                                    Id = reader.GetInt32("ContratoId"),
+                                    }
+                                });
+                        }   
+                    }
+                    conn.Close();
+                }
+             }
+            return res;
+        }
     }
 }
