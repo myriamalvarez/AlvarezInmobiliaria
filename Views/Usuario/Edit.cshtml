@@ -40,6 +40,9 @@
                     </select>
                     <span asp-validation-for="Rol" class="text-danger"></span>
                 </div>
+            }else
+            {
+                @Html.HiddenFor(model => model.Rol);
             }
             <br />
             <div class="form-group">
