@@ -1,3 +1,4 @@
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace AlvarezInmobiliaria.Models
@@ -182,22 +183,30 @@ namespace AlvarezInmobiliaria.Models
             return res!;
         }
 
-        public IList<Pago> ObtenerPagosDelContrato(Contrato contrato)
+        public List<Pago> ObtenerPagosDelContrato(int id)
         {
-            IList<Pago> res = new List<Pago>();
+            List<Pago> res = new List<Pago>();
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string query = @"SELECT p.Id, NumeroPago, Fecha, Importe, ContratoId, c.Id FROM pago p JOIN contrato c
-                                WHERE ContratoId = c.Id;";
+                string query = @"SELECT p.Id, NumeroPago, Fecha, Importe, p.ContratoId, c.Id, c.InquilinoId, c.InmuebleId, FechaInicio, FechaFin, 
+                                 inq.Nombre, inq.Apellido, inm.Id, inm.Direccion 
+                                 FROM pago p 
+                                 INNER JOIN contrato c ON p.ContratoId = c.Id
+                                 INNER JOIN inmueble inm ON c.InmuebleId = inm.Id
+                                 INNER JOIN inquilino inq ON c.InquilinoId = inq.Id
+                                WHERE c.Id = @id;";
                 using(MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.CommandType =CommandType.Text;
                     conn.Open();
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             res.Add(
-                                new Pago{
+                                new Pago
+                                {
                                     Id = reader.GetInt32("Id"),
                                     NumeroPago = reader.GetInt32("NumeroPago"),
                                     Fecha = reader.GetDateTime("Fecha"),
@@ -205,10 +214,26 @@ namespace AlvarezInmobiliaria.Models
                                     ContratoId = reader.GetInt32("ContratoId"),
                                     Contrato = new Contrato
                                     {
-                                    Id = reader.GetInt32("ContratoId"),
+                                        Id = reader.GetInt32("ContratoId"),
+                                        InquilinoId = reader.GetInt32("InquilinoId"),
+                                        InmuebleId = reader.GetInt32("InmuebleId"),
+                                        FechaInicio = reader.GetDateTime("FechaInicio"),
+                                        FechaFin = reader.GetDateTime("FechaFin"),
+                                        Inquilino = new Inquilino
+                                        {
+                                            Id = reader.GetInt32("InquilinoId"),
+                                            Nombre = reader.GetString("Nombre"),
+                                            Apellido = reader.GetString("Apellido"),
+                                        },
+                                        Inmueble = new Inmueble
+                                        {
+                                            Id = reader.GetInt32("InmuebleId"),
+                                            Direccion = reader.GetString("Direccion"),
+                                        }
                                     }
-                                });
-                        }   
+                                }
+                            );
+                        }
                     }
                     conn.Close();
                 }

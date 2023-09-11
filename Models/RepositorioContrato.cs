@@ -145,8 +145,11 @@ public class RepositorioContrato
                             Alquiler = reader.GetDecimal("Alquiler"),
                             InmuebleId = reader.GetInt32("InmuebleId"),
                             InquilinoId = reader.GetInt32("InquilinoId"),
-                            Inmueble = new Inmueble { Direccion = reader.GetString("Direccion"), },
-                            Inquilino = new Inquilino
+                            Inmueble = new Inmueble 
+                            { 
+                                Direccion = reader.GetString("Direccion"), 
+                            },
+                                Inquilino = new Inquilino
                             {
                                 Nombre = reader.GetString("Nombre"),
                                 Apellido = reader.GetString("Apellido"),

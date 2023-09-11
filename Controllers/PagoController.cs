@@ -100,14 +100,18 @@ public class PagoController : Controller
     {
         try
         {
+            List<Pago> lista = repositorio.ObtenerPagosDelContrato(id);
             Contrato contrato = repositorioContrato.ObtenerPorId(id);
-            ViewBag.desde = contrato;
-            var lista = repositorio.ObtenerPagosDelContrato(contrato);
             if(lista.Count == 0)
             {
                 TempData["Info"] = "El contrato no tiene pagos registrados";
+                return View("Index");
             }
-            return View("Index", lista);
+            else
+            {
+                ViewBag.Contrato = contrato;
+                return View("PagosPorContrato", lista);
+            }
         }
         catch (Exception ex)
         {

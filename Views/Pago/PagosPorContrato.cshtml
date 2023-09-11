@@ -2,9 +2,10 @@
 
     @{
         ViewData["Title"] = "Listado de Pagos";
+        Contrato contrato = ViewBag.Contrato ?? new Contrato();
     }
 
-        <h1>Listado de Pagos</h1>
+        <h1>Listado de Pagos del contrato @contrato.Id</h1>
         <a asp-action="Create" class="btn btn-primary"> Nuevo Pago</a>
         <table class="table table-striped" style="width:100%">
         <thead>
@@ -22,13 +23,16 @@
                     @Html.DisplayNameFor(model => model.Importe)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ContratoId)
+                    Inicio
                 </th>
                 <th>
-                    Direccion del inmueble
-                </th> 
+                    Finalización
+                </th>
                 <th>
                     Inquilino
+                </th> 
+                <th>
+                    Dirección 
                 </th>               
                 <th>
                     Acciones
@@ -52,13 +56,16 @@
                         @Html.DisplayFor(modelItem => item.Importe)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ContratoId)
+                        @(item.Contrato!.FechaInicio.Date.ToString())
                     </td>
                     <td>
-                        @(item.Contrato!.Inmueble!.Direccion)
+                        @(item.Contrato!.FechaFin.Date.ToString())
                     </td>
                     <td>
                         @(item.Contrato!.Inquilino!.ToString())
+                    </td>
+                    <td>
+                        @(item.Contrato!.Inmueble!.Direccion)
                     </td>
                     <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success" title="Detalles"><i class="bi bi-info-circle"></i>Detalles</a>
