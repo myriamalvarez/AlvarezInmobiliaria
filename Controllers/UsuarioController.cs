@@ -21,6 +21,7 @@ namespace AlvarezInmobiliaria.Controllers
             this.repositorio = new RepositorioUsuario();
         }
 
+        [Authorize(Policy = "Administrador")]
         public IActionResult Index()
         {
             var lista = repositorio.ObtenerUsuarios();
@@ -28,6 +29,7 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
             ViewBag.Roles = Usuario.ObtenerRoles();
@@ -36,6 +38,7 @@ namespace AlvarezInmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create(Usuario usuario)
         {
             if(!ModelState.IsValid)
@@ -161,6 +164,7 @@ namespace AlvarezInmobiliaria.Controllers
             }
         }
 
+
         [Authorize]
         public ActionResult Details(int id)
         {
@@ -168,6 +172,8 @@ namespace AlvarezInmobiliaria.Controllers
             return View(usuario);
         }
 
+
+        [Authorize]
         public ActionResult Perfil()
         {
             ViewData["Title"] = "Mi perfil";
@@ -181,20 +187,32 @@ namespace AlvarezInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditarDatos(int id, string nombre, string apellido, string email,int rol)
         {
-            try
+            var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+            if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
             {
-                repositorio.EditarDatos(id,nombre,apellido,email,rol); 
-                TempData["success"] = "Datos editados correctamente";
-                
-                    return RedirectToAction("Index");
-                
+                return RedirectToAction("Restringido", "Home");
             }
-            catch (Exception ex)
+            else
             {
-                TempData["error"] = ex.Message;
-                return View("Edit");
+                try
+                    {
+                        repositorio.EditarDatos(id,nombre,apellido,email,rol); 
+                        TempData["success"] = "Datos editados correctamente";
+                        if( usuarioActual.Id == id)
+                        {
+                        return View("Details", usuarioActual);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                catch (Exception ex)
+                    {
+                        TempData["error"] = ex.Message;
+                        return View("Edit");
+                    }
             }
-
         }
 
         [Authorize]
@@ -202,40 +220,43 @@ namespace AlvarezInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CambiarClave(int id, string ClaveNueva, string ClaveConfirmada)
         {   
-            try
+            var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+            if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
             {
-                var usuario = repositorio.ObtenerPorId(id);
-                var hashNuevo = "";
-                if(ClaveNueva == ClaveConfirmada) 
+                return RedirectToAction("Restringido", "Home");
+            }
+            else
+            {
+
+                try
                 {
-                        hashNuevo = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: ClaveNueva,
-                        salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
-                        prf: KeyDerivationPrf.HMACSHA1,
-                        iterationCount: 10000,
-                        numBytesRequested: 256 / 8));
-                    usuario.Clave = hashNuevo;
-                    repositorio.CambiarClave(id, hashNuevo);
-                    TempData["Success"] = "Contraseña modificada con exito!";
-                    if( usuario.Id == id)
+                    var usuario = repositorio.ObtenerPorId(id);
+                    var hashNuevo = "";
+                    if(ClaveNueva == ClaveConfirmada) 
                     {
-                    return View("Details", usuario);
+                            hashNuevo = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                            password: ClaveNueva,
+                            salt: System.Text.Encoding.ASCII.GetBytes("JuanaKoslay"),
+                            prf: KeyDerivationPrf.HMACSHA1,
+                            iterationCount: 10000,
+                            numBytesRequested: 256 / 8));
+                        usuario.Clave = hashNuevo;
+                        repositorio.CambiarClave(id, hashNuevo);
+                        TempData["Success"] = "Contraseña modificada con exito!";
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        return View("Index");
-                    }
-                }
-                else
+                        TempData["Error"] = "Las contraseñas no coinciden.";
+                        usuario.Clave = usuario.Clave;
+                        ViewBag.Roles = Usuario.ObtenerRoles();
+                        return View("Edit", usuario);
+                    }                              
+                }catch(Exception ex)
                 {
-                    TempData["Error"] = "Las contraseñas no coinciden.";
-                    usuario.Clave = usuario.Clave;
-                    return View("Edit", usuario);
-                }                              
-            }catch(Exception ex)
-            {
-                TempData["Error"] = ex.Message;
-                return View("Edit");
+                    TempData["Error"] = ex.Message;
+                    return View("Edit");
+                }
             }
         }
 
@@ -244,25 +265,49 @@ namespace AlvarezInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CambiarAvatar(int id, Usuario usuario)
         {
-            var u = repositorio.ObtenerPorId(id);
-            string wwwPath = environment.WebRootPath;
-            string path = Path.Combine(wwwPath, "avatar");
-             if (!Directory.Exists(path))
-             {
-                Directory.CreateDirectory(path);
-             }
-             string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
-             string pathCompleto = Path.Combine(path, fileName);
-             u.Avatar = Path.Combine("/avatar", fileName);
-             using (FileStream fs = new FileStream(pathCompleto, FileMode.Create))
-             {
-                usuario.AvatarFile.CopyTo(fs);
-             }
-             repositorio.Modificacion(u);
-             TempData["success"] = "Imagen modificada correctamente";
-             return View("Details", u);
+            var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+            if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
+            {
+                return RedirectToAction("Restringido", "Home");
+            }
+            else
+            {
+                if(usuarioActual.AvatarFile != null)
+                {
+                    usuarioActual = repositorio.ObtenerPorId(id);
+                    string wwwPath = environment.WebRootPath;
+                    string path = Path.Combine(wwwPath, "avatar");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    string fileName ="usuario_" + usuarioActual.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
+                    string pathCompleto = Path.Combine(path, fileName);
+                    usuarioActual.Avatar = Path.Combine("/avatar", fileName);
+                    using (FileStream fs = new FileStream(pathCompleto, FileMode.Create))
+                    {
+                        usuarioActual.AvatarFile!.CopyTo(fs);
+                    }
+                }
+                else
+                {
+                    usuario.Avatar = usuarioActual.Avatar;
+                }    
+                    repositorio.Modificacion(usuarioActual);
+                    TempData["success"] = "Imagen modificada correctamente";
+                    if( usuario.Id == id)
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                return View("Index");
+                            }   
+            }
         }
 
+
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var usuario = repositorio.ObtenerPorId(id);
@@ -271,6 +316,7 @@ namespace AlvarezInmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Usuario usuario)
         {
             try
@@ -287,6 +333,7 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         //GET: Login
+        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             TempData["returnUrl"] = returnUrl;
@@ -295,6 +342,8 @@ namespace AlvarezInmobiliaria.Controllers
 
         //POST: Login
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginView login)
         {
             try
@@ -350,6 +399,7 @@ namespace AlvarezInmobiliaria.Controllers
         }
 
         // GET: Salir
+        [AllowAnonymous]
         [Route("salir", Name = "logout")]
         public async Task<ActionResult> Logout()
         {

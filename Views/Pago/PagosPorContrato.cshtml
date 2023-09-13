@@ -6,7 +6,12 @@
     }
 
         <h1>Listado de Pagos del contrato @contrato.Id</h1>
-        <a asp-action="Create" class="btn btn-primary"> Nuevo Pago</a>
+            <p>
+
+        <button  type="button" id="crearModal" class="btn btn-primary" style="width:200px" data-target="#myModal">Crear nuevo</button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Pago" aria-hidden="true" data-url="@Url.Action("CreateModal","Pago", new { id = contrato.Id })"></div>
+    </p>
+        
         <table class="table table-striped" style="width:100%">
         <thead>
             <tr>
@@ -56,10 +61,10 @@
                         @Html.DisplayFor(modelItem => item.Importe)
                     </td>
                     <td>
-                        @(item.Contrato!.FechaInicio.Date.ToString())
+                        @(item.Contrato!.FechaInicio.Date.ToShortDateString())
                     </td>
                     <td>
-                        @(item.Contrato!.FechaFin.Date.ToString())
+                        @(item.Contrato!.FechaFin.Date.ToShortDateString())
                     </td>
                     <td>
                         @(item.Contrato!.Inquilino!.ToString())
@@ -79,6 +84,24 @@
             }
         </tbody>
     </table>
+<script type="text/javascript">
 
+    $(document).ready(function () {
+
+        $('#crearModal').click(function () {
+
+            var url = $("#myModal").data("url");
+            $.get(url, function (data) {
+
+                $("#myModal").html(data);
+                $("#myModal").modal("show");
+
+            });
+
+        });
+
+    });
+
+</script>
 
 

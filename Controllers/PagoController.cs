@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -17,6 +18,7 @@ public class PagoController : Controller
         this.repositorioContrato = new RepositorioContrato();
     }
 
+    [Authorize]
     public ActionResult Index()
     {
         List<Pago> lista = repositorio.ObtenerPagos();
@@ -24,6 +26,7 @@ public class PagoController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult Create()
     {
         ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -31,6 +34,8 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Create(Pago pago)
     {
         if (!ModelState.IsValid)
@@ -66,6 +71,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize]
     public ActionResult Details(int id)
     {
         ViewBag.contratos = repositorioContrato.ObtenerContratos();
@@ -73,6 +79,7 @@ public class PagoController : Controller
         return View(pago);
     }
 
+    [Authorize]
     public ActionResult Edit(int id)
     {
             var pago = repositorio.ObtenerPorId(id);
@@ -81,6 +88,8 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Edit(int id, Pago pago)
     {
         try
@@ -96,6 +105,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize]
     public ActionResult PagosPorContrato(int id)
     {
         try
@@ -119,6 +129,8 @@ public class PagoController : Controller
             return View("Index");
         }
     }
+
+    [Authorize(Policy = "Administrador")]
     public ActionResult Delete(int id)
     {
         var pago = repositorio.ObtenerPorId(id);
@@ -126,6 +138,8 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Policy = "Administrador")]
     public ActionResult Delete(int id, Pago pago)
     {
         try
@@ -140,4 +154,26 @@ public class PagoController : Controller
             return View(pago);
         }
     }
+
+
+    /*public ActionResult CreateModal(int id)
+    {
+        try
+        {
+            Contrato contrato = repositorioContrato.ObtenerPorId(id);
+            Pago pago = new()
+            {
+                Id = contrato.Id,
+                Fecha = DateTime.Now,
+                Importe = contrato.Alquiler
+            };
+
+            return PartialView("_CreateModal", pago);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View();
+        }
+    }*/
 }

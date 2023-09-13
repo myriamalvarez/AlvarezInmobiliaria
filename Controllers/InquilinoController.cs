@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -18,6 +19,7 @@ public class InquilinoController : Controller
         this.repositorio = new RepositorioInquilino();
     }
 
+    [Authorize]
     public ActionResult Index()
     {
         List<Inquilino> lista = repositorio.ObtenerInquilinos();
@@ -25,12 +27,15 @@ public class InquilinoController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Create(Inquilino inquilino)
     {
         if (!ModelState.IsValid)
@@ -58,12 +63,14 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize]
     public ActionResult Details(int id)
     {
         var inquilino = repositorio.ObtenerPorId(id);
         return View(inquilino);
     }
 
+    [Authorize]
     public ActionResult Edit(int id)
     {
         var inquilino = repositorio.ObtenerPorId(id);
@@ -71,6 +78,8 @@ public class InquilinoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
     public ActionResult Edit(int id, Inquilino inquilino)
     {
         try
@@ -86,6 +95,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize(Policy = "Administrador")]
     public ActionResult Delete(int id)
     {
         var inquilino = repositorio.ObtenerPorId(id);
@@ -93,6 +103,8 @@ public class InquilinoController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Policy = "Administrador")]
     public ActionResult Delete(int id, Inquilino inquilino)
     {
         try
