@@ -1,0 +1,71 @@
+@model IEnumerable<AlvarezInmobiliaria.Models.Inmueble>
+    @{
+        ViewData["Title"] = "Inmuebles disponibles";
+    }
+    <h1>Inmuebles</h1>
+    <p>
+        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-house-add"></i>Nuevo inmueble</a>
+    </p>
+    <table class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Direccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Uso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ambientes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PropietarioId)
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsoNombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoNombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ambientes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success" title="Detalles"><i class="bi bi-info-circle"></i>Detalles</a>
+                        @if(User.IsInRole("Administrador"))
+                        {
+				        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Eliminar"><i class="bi bi-trash"></i>Eliminar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

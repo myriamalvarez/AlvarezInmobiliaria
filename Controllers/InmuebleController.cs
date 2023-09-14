@@ -129,4 +129,10 @@ public class InmuebleController : Controller
             return View(inmueble);
         }
     }
+
+    public ActionResult Disponibles()
+    {
+        var lista = repositorio.ObtenerInmueblesDisponibles();
+        return View(lista);
+    }
 }

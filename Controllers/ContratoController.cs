@@ -153,4 +153,20 @@ public class ContratoController : Controller
         ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
         return View(contrato);
     }
+
+    public ActionResult Vigentes()
+    {
+        try
+        {
+            var hoy = DateTime.Now;
+            var lista = repositorio.ContratosVigentes(hoy);
+            ViewBag.Id = TempData["Id"];
+            return View(lista);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View();
+        }
+    }
 }

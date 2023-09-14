@@ -212,4 +212,5 @@ public class RepositorioInmueble
         }
         return res;
     }
+
 }

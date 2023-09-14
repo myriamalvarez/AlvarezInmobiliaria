@@ -1,3 +1,4 @@
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace AlvarezInmobiliaria.Models;
@@ -162,5 +163,53 @@ public class RepositorioContrato
         }
         return contrato!;
     }
+ 
+    public List<Contrato> ContratosVigentes(DateTime fecha)
+    {
+        List<Contrato> contratos = new List<Contrato>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"SELECT c.Id, FechaInicio, FechaFin, Alquiler, InmuebleId, InquilinoId, i.Direccion, inq.Nombre, inq.Apellido
+			FROM contrato c
+			INNER JOIN inmueble i ON i.Id = c.InmuebleId
+            INNER JOIN inquilino inq ON inq.Id = c.InquilinoId
+			WHERE @fecha BETWEEN FechaInicio AND FechaFin;";
 
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.Add("@fecha", MySqlDbType.Date).Value = fecha.Date;
+                command.CommandType = CommandType.Text;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                
+                    while (reader.Read())
+                    {
+                        Contrato contrato = new Contrato
+                        {
+                            Id = reader.GetInt32("Id"),
+                            FechaInicio = reader.GetDateTime("FechaInicio"),
+                            FechaFin = reader.GetDateTime("FechaFin"),
+                            Alquiler = reader.GetDecimal("Alquiler"),
+                            InmuebleId = reader.GetInt32("InmuebleId"),
+                            InquilinoId = reader.GetInt32("InquilinoId"),
+                            Inmueble = new Inmueble 
+                            { 
+                                Direccion = reader.GetString("Direccion"), 
+                            },
+                                Inquilino = new Inquilino
+                            {
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                            }
+                        };
+                        contratos.Add(contrato);
+                    }
+                    
+            }
+            connection.Close();
+        }
+        return contratos!;
+        
+    }
 }
