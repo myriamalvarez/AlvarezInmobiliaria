@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-09-2023 a las 08:37:22
+-- Tiempo de generación: 14-09-2023 a las 19:23:20
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -73,7 +73,8 @@ INSERT INTO `inmueble` (`Id`, `Direccion`, `Uso`, `Tipo`, `Ambientes`, `Latitud`
 (3, 'Lafinur 488 San Luis', 2, 3, 1, 11.66000, -78.82000, 1, 86000.00, 3),
 (4, 'Lavalle 293 P 1° B San Luis', 1, 2, 2, 999.99999, -58.32000, 1, 75000.00, 9),
 (5, 'Pringles 555 Local 2 Merlo', 1, 1, 3, 32.31000, -95.21000, 0, 66000.00, 7),
-(7, 'Falucho 555 San Luis', 1, 1, 2, 34.65420, -999.99999, 1, 63000.00, 12);
+(7, 'Falucho 555 San Luis', 1, 1, 2, 34.65420, -999.99999, 1, 63000.00, 12),
+(8, 'España 136 San Luis', 2, 5, 1, 32.30200, -65.12500, 1, 130000.00, 1);
 
 -- --------------------------------------------------------
 
@@ -125,7 +126,7 @@ INSERT INTO `pago` (`Id`, `NumeroPago`, `Fecha`, `Importe`, `ContratoId`) VALUES
 (3, 2, '2023-06-01', 100000, 8),
 (4, 1, '2023-09-01', 75000, 7),
 (5, 3, '2023-07-01', 100000, 8),
-(7, 4, '2023-10-01', 100000, 8),
+(7, 4, '2023-08-02', 100000, 8),
 (10, 1, '2023-06-02', 86000, 9);
 
 -- --------------------------------------------------------
@@ -180,11 +181,11 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Avatar`, `Email`, `Clave`, `Rol`) VALUES
 (2, 'Myriam', 'Alvarez', '/avatar\\usuario_2.jpg', 'myriamalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
 (3, 'Luis', 'Alvarez', '/avatar\\usuario_3.jpg', 'luisalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
-(4, 'Luisa', 'Alvarez', '/avatar\\usuario_4.jpg', 'luisaalvarez@gmail.com', 'DCSdtG2Wyt6bQ964KjEzKvQZJOcfe451NRB6lAJw/Vk=', 2),
+(4, 'Luisa', 'Alvarez', '/avatar\\usuario_4.jpg', 'luisaalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
 (5, 'Juan', 'Perez', '/avatar\\usuario_5.jpg', 'juanperez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
-(6, 'Carla', 'Merlo', '/avatar\\usuario_6.jpg', 'carlosmerlo@gmail.com', 'AeLDqhiQFWGUP/TOh8oAsU+hsN7snhJzhi0NZX41e9g=', 2),
-(7, 'Raul', 'aaa', '/avatar\\usuario_7.jpg', 'aaa@gmail.com', '9JQOcFlHg+YBXkWGbkNosovsh6uUQQTwmyW+3zIdU9Y=', 1),
-(9, 'Karin', 'Juarez', '/avatar\\usuario_9.jpg', 'karijuarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2);
+(6, 'Carla', 'Merlo', '/avatar\\usuario_6.jpg', 'carlamerlo@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(7, 'Raul', 'Aguilar', '/avatar\\usuario_7.png', 'raul@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
+(9, 'Karina', 'Juarez', '/avatar\\usuario_9.jpg', 'karijuarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2);
 
 --
 -- Índices para tablas volcadas
@@ -244,7 +245,7 @@ ALTER TABLE `contrato`
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
