@@ -111,7 +111,7 @@ public class PagoController : Controller
         try
         {
             List<Pago> lista = repositorio.ObtenerPagosDelContrato(id);
-            Contrato contrato = repositorioContrato.ObtenerPorId(id);
+            ViewBag.Contrato = repositorioContrato.ObtenerPorId(id);
             if(lista.Count == 0)
             {
                 TempData["Info"] = "El contrato no tiene pagos registrados";
@@ -119,7 +119,6 @@ public class PagoController : Controller
             }
             else
             {
-                ViewBag.Contrato = contrato;
                 return View("PagosPorContrato", lista);
             }
         }
@@ -155,25 +154,4 @@ public class PagoController : Controller
         }
     }
 
-
-    /*public ActionResult CreateModal(int id)
-    {
-        try
-        {
-            Contrato contrato = repositorioContrato.ObtenerPorId(id);
-            Pago pago = new()
-            {
-                Id = contrato.Id,
-                Fecha = DateTime.Now,
-                Importe = contrato.Alquiler
-            };
-
-            return PartialView("_CreateModal", pago);
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = ex.Message;
-            return View();
-        }
-    }*/
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Runtime.ConstrainedExecution;
 
 namespace AlvarezInmobiliaria.Controllers;
 
@@ -112,6 +113,18 @@ public class ContratoController : Controller
     public ActionResult Delete(int id)
     {
         var contrato = repositorio.ObtenerPorId(id);
+        var inicio = contrato.FechaInicio;
+        var fin = contrato.FechaFin;
+        var tiempoContrato = fin - inicio;
+        var hoy = DateTime.Now;
+        if(fin - hoy > tiempoContrato / 2)
+        {
+            ViewBag.Multa = contrato.Alquiler * 2;
+        }
+        else
+        {
+            ViewBag.Multa = contrato.Alquiler;
+        }
         return View(contrato);
     }
 
@@ -131,5 +144,13 @@ public class ContratoController : Controller
             TempData["Error"] = ex.Message;
             return View(contrato);
         }
+    }
+
+    public ActionResult Renovar(int id)
+    {
+        var contrato = repositorio.ObtenerPorId(id);
+        ViewBag.Inmuebles = repositorioInmueble.ObtenerInmuebles();
+        ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
+        return View(contrato);
     }
 }

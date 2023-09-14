@@ -1,16 +1,14 @@
 @model IEnumerable<AlvarezInmobiliaria.Models.Pago>
 
     @{
-        ViewData["Title"] = "Listado de Pagos";
-        Contrato contrato = ViewBag.Contrato ?? new Contrato();
+        ViewData["Title"] = "Listado de Pagos ";
+        var contrato = (Contrato)ViewBag.Contrato;
     }
 
         <h1>Listado de Pagos del contrato @contrato.Id</h1>
-            <p>
 
-        <button  type="button" id="crearModal" class="btn btn-primary" style="width:200px" data-target="#myModal">Crear nuevo</button>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Pago" aria-hidden="true" data-url="@Url.Action("CreateModal","Pago", new { id = contrato.Id })"></div>
-    </p>
+        <a class="btn btn-primary"asp-action="Create" asp-controller="Pago" asp-route-id="@contrato.Id">Nuevo pago</a>
+
         
         <table class="table table-striped" style="width:100%">
         <thead>
@@ -84,24 +82,6 @@
             }
         </tbody>
     </table>
-<script type="text/javascript">
 
-    $(document).ready(function () {
-
-        $('#crearModal').click(function () {
-
-            var url = $("#myModal").data("url");
-            $.get(url, function (data) {
-
-                $("#myModal").html(data);
-                $("#myModal").modal("show");
-
-            });
-
-        });
-
-    });
-
-</script>
 
 

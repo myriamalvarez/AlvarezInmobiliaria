@@ -1,0 +1,60 @@
+@model AlvarezInmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Renovar contrato";
+}
+
+<h1>Renovar Contrato</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id">
+            <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control"/>
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaFin" class="control-label"></label>
+                <input asp-for="FechaFin" class="form-control"/>
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Alquiler" class="control-label"></label>
+                <input asp-for="Alquiler" class="form-control" placeholder="Monto del alquiler"/>
+                <span asp-validation-for="Alquiler" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InmuebleId" class="control-label"></label>
+                <select class="form-control" name="InmuebleId">
+                    @if(ViewBag.Inmuebles != null)
+                    {
+                        @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
+                        {
+                           @:<option @(item.Id == Model.InmuebleId ? "Selected": "") value="@item.Id">@item.Direccion</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="InquilinoId" class="control-label"></label>
+                <select class="form-control" name="InquilinoId">
+                    <option value="" selected disabled>Seleccione un Inquilino...</option>
+                    @if(ViewBag.Inquilinos != null)
+                    {
+                        @foreach (var item in (IList<Inquilino>)ViewBag.Inquilinos)
+                        {
+                             @:<option @(item.Id == Model.InquilinoId ? "Selected": "") value="@item.Id">@item.ToString()</option>
+                        }
+                    }
+                </select>
+            </div>
+            <br/>
+            <div>
+                <a asp-action="Index" class="btn btn-secondary"><i class="chevron-double-left"></i>Volver al listado</a>
+                <input type="submit" value="Renovar" class="btn btn-success">
+            </div>
+        </form>
+    </div>
+</div>

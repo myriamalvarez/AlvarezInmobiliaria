@@ -62,6 +62,8 @@
 				@if(User.IsInRole("Administrador"))
 				{
 					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
+
+					<a asp-action="Renovar" asp-route-id="@item.Id" class="btn btn-secondary"  title="Renovar"><i class="bi bi-clipboard-plus"></i>Renovar</a>
 						
 					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Eliminar"><i class="bi bi-trash"></i>Eliminar</a>
 				}
