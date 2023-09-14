@@ -1,3 +1,4 @@
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace AlvarezInmobiliaria.Models;
@@ -211,6 +212,100 @@ public class RepositorioInmueble
             }
         }
         return res;
+    }
+    public List<Inmueble> BuscarPorFecha(DateTime desde, DateTime hasta)
+    {
+       var res = new List<Inmueble>();
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"SELECT i.Id, Direccion, Uso, Tipo, Ambientes, Latitud, Longitud, Precio
+                        FROM inmueble i
+                        LEFT JOIN contrato c ON i.Id = c.InmuebleId
+                        AND ((c.FechaInicio BETWEEN @desde AND @hasta)
+                        OR (c.FechaFin BETWEEN @desde AND @hasta))
+                        AND c.InmuebleId != 0
+                        WHERE c.InmuebleId IS NULL
+                        AND i.Estado = 1";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@desde", MySqlDbType.Date).Value = desde.Date;
+                cmd.Parameters.Add("@hasta", MySqlDbType.Date).Value = hasta.Date;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@id", 0);
+                conn.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        res.Add(
+                            new Inmueble
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Direccion = reader.GetString("Direccion"),
+                                Uso = reader.GetInt32("Uso"),
+                                Tipo = reader.GetInt32("Tipo"),
+                                Ambientes = reader.GetInt32("Ambientes"),
+                                Latitud = reader.GetDecimal("Latitud"),
+                                Longitud = reader.GetDecimal("Longitud"),
+                                Precio = reader.GetDecimal("Precio"),
+                            }
+                        );
+                    }
+                }
+                conn.Close();
+            }
+        }
+        return res; 
+    }
+    public List<Inmueble> BuscarPorPropietario(int id)
+    {
+        List<Inmueble> res = new List<Inmueble>();
+        Inmueble e = null!;
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"SELECT i.Id, Direccion, Uso, Tipo, Ambientes, Latitud, Longitud, Estado, Precio, PropietarioId, p.Nombre, p.Apellido 
+                          FROM inmueble i INNER JOIN propietario p ON p.Id = i.PropietarioId
+                          WHERE PropietarioId = @id;";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+                cmd.CommandType = CommandType.Text;
+                conn.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        e = new Inmueble
+                        {
+                            Id = reader.GetInt32("id"),
+                            Direccion = reader.GetString("direccion"),
+                            Uso = reader.GetInt32("uso"),
+                            Tipo = reader.GetInt32("tipo"),
+                            Ambientes = reader.GetInt32("ambientes"),
+                            Latitud = reader.GetDecimal("latitud"),
+                            Longitud = reader.GetDecimal("longitud"),
+                            Estado = reader.GetBoolean("estado"),
+                            Precio = reader.GetDecimal("precio"),
+                            PropietarioId = reader.GetInt32("propietarioId"),
+                            Propietario = new Propietario
+                            {
+                                Id = reader.GetInt32("propietarioId"),
+                                Nombre = reader.GetString("nombre"),
+                                Apellido = reader.GetString("apellido"),
+                            }
+                        };
+                        res.Add(e);
+                    }
+                    
+                }
+                conn.Close();
+            }
+          return res;  
+        }
+        
     }
 
 }

@@ -1,0 +1,72 @@
+@model IEnumerable<AlvarezInmobiliaria.Models.Contrato>
+    @{
+        ViewData["Title"] = "Contratos";
+	
+    }
+
+<h1>Listado de contratos</h1>
+
+
+<table class="table table-striped" style="width:100%">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FechaInicio)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FechaFin)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Alquiler)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.InmuebleId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.InquilinoId)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Id)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FechaInicio)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FechaFin)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Alquiler)
+			</td>
+			<td>
+				@(item.Inmueble?.Direccion)
+			</td>
+			<td>
+				@(item.Inquilino?.Nombre + " " + item.Inquilino?.Apellido)
+			</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success" title="Detalles"><i class="bi bi-info-circle"></i>Detalles</a>
+
+				<a asp-action="PagosPorContrato" asp-controller="Pago" asp-route-id="@item.Id" class="btn btn-info" title="Pagos"><i class="bi bi-cash-coin"></i>Ver pagos</a>
+				
+				@if(User.IsInRole("Administrador"))
+				{
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
+
+					<a asp-action="Renovar" asp-route-id="@item.Id" class="btn btn-secondary"  title="Renovar"><i class="bi bi-clipboard-plus"></i>Renovar</a>
+						
+					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Eliminar"><i class="bi bi-trash"></i>Eliminar</a>
+				}
+			</td>
+		</tr>
+}
+	</tbody>
+</table>

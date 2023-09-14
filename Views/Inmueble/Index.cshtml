@@ -6,6 +6,30 @@
     <p>
         <a asp-action="Create" class="btn btn-primary"><i class="bi bi-house-add"></i>Nuevo inmueble</a>
     </p>
+    <div class="row">
+    <div class="col-md-12">
+        <form id="buscarFechas" action="@Url.Action("BuscarPorFecha", "Inmueble")" method="get">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <span class="form-text">
+                        DESDE:
+                    </span>
+                    <input type="Date" id="desde" class="form-control">
+                </div>
+                <div class="col-auto">
+                    <span class="form-text">
+                        HASTA:
+                    </span>
+                    <input type="Date" id="hasta" class="form-control">
+                </div>
+                <div class="col-auto">
+                    <br>
+                    <button type="submit" class="btn btn-primary">BUSCAR</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
     <table class="table table-striped" style="width:100%">
         <thead>
             <tr>
@@ -65,6 +89,7 @@
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success" title="Detalles"><i class="bi bi-info-circle"></i>Detalles</a>
+                        <a class="btn btn-secondary" asp-controller="Contrato" asp-action="VerContratos" asp-route-id="@item.Id"><i class="bi bi-files-alt"></i>Ver Contratos</a>
                         @if(User.IsInRole("Administrador"))
                         {
 				        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>

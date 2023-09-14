@@ -169,4 +169,18 @@ public class ContratoController : Controller
             return View();
         }
     }
+    [Authorize]
+    public ActionResult VerContratos(int id)
+    {
+        try
+        {
+            var lista = repositorio.BuscarPorInmuble(id);
+            return View(lista);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View();
+        }
+    }
 }

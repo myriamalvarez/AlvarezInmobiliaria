@@ -130,9 +130,24 @@ public class InmuebleController : Controller
         }
     }
 
+    [Authorize]
     public ActionResult Disponibles()
     {
         var lista = repositorio.ObtenerInmueblesDisponibles();
+        return View(lista);
+    }
+
+    [Authorize]
+    public ActionResult BuscarPorFecha(DateTime desde, DateTime hasta)
+    {
+        var lista = repositorio.BuscarPorFecha(desde, hasta);
+        return View("Index",lista);
+    }
+
+    [Authorize]
+    public ActionResult InmueblesPorPropietario(int id)
+    {
+        var lista = repositorio.BuscarPorPropietario(id);
         return View(lista);
     }
 }

@@ -50,5 +50,6 @@
 		</dd>
 	</dl>
 	<a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle-fill"></i>Volver al listado</a>
-	<a href='@Url.Action("Edit", new {id = Model.Id})' class="btn btn-success"><i class="bi bi-pencil">Editar</i></a> 
+	<a href='@Url.Action("Edit", new {id = Model.Id})' class="btn btn-success"><i class="bi bi-pencil">Editar</i></a>
+	<a asp-controller="Inmueble" asp-action="InmueblesPorPropietario" asp-route-id="@Model.Id" class="btn btn-warning"><i class="bi bi-houses"></i>Inmuebles</a>
 </div>

@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
 
@@ -211,5 +212,46 @@ public class RepositorioContrato
         }
         return contratos!;
         
+    }
+    public List<Contrato> BuscarPorInmuble(int id)
+    {
+      List<Contrato> contratos = new List<Contrato>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query =
+                @"SELECT c.Id, FechaInicio, FechaFin, Alquiler, InmuebleId, InquilinoId, i.Direccion, inq.Nombre, inq.Apellido
+                        FROM contrato c JOIN inmueble i ON i.Id = c.InmuebleId
+                        JOIN inquilino inq ON inq.Id = c.InquilinoId
+                        WHERE InmuebleId = @id;";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.Add("id", MySqlDbType.Int32).Value = id;
+                command.CommandType = CommandType.Text;
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    contratos.Add(
+                        new Contrato
+                        {
+                            Id = reader.GetInt32("Id"),
+                            FechaInicio = reader.GetDateTime("FechaInicio"),
+                            FechaFin = reader.GetDateTime("FechaFin"),
+                            Alquiler = reader.GetDecimal("Alquiler"),
+                            InmuebleId = reader.GetInt32("InmuebleId"),
+                            InquilinoId = reader.GetInt32("InquilinoId"),
+                            Inmueble = new Inmueble { Direccion = reader.GetString("Direccion"), },
+                            Inquilino = new Inquilino
+                            {
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                            }
+                        }
+                    );
+                }
+                connection.Close();
+            }
+        }
+        return contratos;  
     }
 }
