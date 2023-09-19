@@ -7,12 +7,12 @@ namespace AlvarezInmobiliaria.Controllers;
 
 public class ContratoController : Controller
 {
-    private readonly ILogger<InmuebleController> _logger;
+    private readonly ILogger<ContratoController> _logger;
     private readonly RepositorioContrato repositorio;
     private readonly RepositorioInmueble repositorioInmueble;
     private readonly RepositorioInquilino repositorioInquilino;
 
-    public ContratoController(ILogger<InmuebleController> logger)
+    public ContratoController(ILogger<ContratoController> logger)
     {
         _logger = logger;
         this.repositorio = new RepositorioContrato();
@@ -145,15 +145,45 @@ public class ContratoController : Controller
             return View(contrato);
         }
     }
-
+    [Authorize]
     public ActionResult Renovar(int id)
     {
         var contrato = repositorio.ObtenerPorId(id);
+        ViewBag.Contrato = contrato;
         ViewBag.Inmuebles = repositorioInmueble.ObtenerInmuebles();
+        ViewBag.Inmueble = repositorioInmueble.ObtenerPorId(contrato.InmuebleId);
         ViewBag.Inquilinos = repositorioInquilino.ObtenerInquilinos();
+        ViewBag.Inquilino = repositorioInquilino.ObtenerPorId(contrato.InquilinoId);
         return View(contrato);
     }
 
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public ActionResult Renovar(int id, Contrato contrato)
+    {
+        Contrato c = new Contrato();
+        try
+        {
+            c.FechaInicio = contrato.FechaInicio;
+            c.FechaFin = contrato.FechaFin;
+            c.Alquiler = contrato.Alquiler;
+            c.InmuebleId = contrato.InmuebleId;
+            c.InquilinoId = contrato.InquilinoId;
+            repositorio.Alta(c);
+            TempData["success"] = "Contrato renovado con exito";
+            return View("Index", "Home");
+        }
+
+        catch(Exception ex)
+        {
+           TempData["Error"] = ex.Message;
+           return View("Index"); 
+        }
+    }
+
+
+    [Authorize]
     public ActionResult Vigentes()
     {
         try

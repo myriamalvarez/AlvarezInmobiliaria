@@ -10,10 +10,10 @@ namespace AlvarezInmobiliaria.Controllers;
 
 public class InquilinoController : Controller
 {
-    private readonly ILogger<PropietarioController> _logger;
+    private readonly ILogger<InquilinoController> _logger;
     private readonly RepositorioInquilino repositorio;
 
-    public InquilinoController(ILogger<PropietarioController> logger)
+    public InquilinoController(ILogger<InquilinoController> logger)
     {
         _logger = logger;
         this.repositorio = new RepositorioInquilino();

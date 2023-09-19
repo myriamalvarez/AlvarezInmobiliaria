@@ -5,6 +5,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.VisualBasic;
 
 namespace AlvarezInmobiliaria.Controllers
 {
@@ -128,7 +130,7 @@ namespace AlvarezInmobiliaria.Controllers
                             usuario.Clave = usuarioActual.Clave;
                         }
 
-                    if (usuario.AvatarFile != null)
+                    if (usuario.AvatarFile != null && usuario.Id > 0)
                     {
                         string wwwPath = environment.WebRootPath;
                         string path = Path.Combine(wwwPath, "avatar");
@@ -263,49 +265,58 @@ namespace AlvarezInmobiliaria.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CambiarAvatar(int id, Usuario usuario)
+        public ActionResult CambiarAvatar(Usuario usuario)
         {
-            var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
-            if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
-            {
-                return RedirectToAction("Restringido", "Home");
-            }
-            else
-            {
-                if(usuarioActual.AvatarFile != null)
+            try
+            {       
+                var u = repositorio.ObtenerPorId(usuario.Id);
+                /*if(!User.IsInRole("Administrador"))//no soy admin
                 {
-                    usuarioActual = repositorio.ObtenerPorId(id);
+                    var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+                    if(usuarioActual.Id != usuario.Id)
+                    return RedirectToAction("Restringido", "Home");
+                }*/
+                if(usuario.AvatarFile != null && usuario.Id > 0)
+                {
+                
                     string wwwPath = environment.WebRootPath;
                     string path = Path.Combine(wwwPath, "avatar");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
-                    string fileName ="usuario_" + usuarioActual.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
+                    string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
                     string pathCompleto = Path.Combine(path, fileName);
-                    usuarioActual.Avatar = Path.Combine("/avatar", fileName);
+                    usuario.Avatar = Path.Combine("/avatar", fileName);
+        
                     using (FileStream fs = new FileStream(pathCompleto, FileMode.Create))
                     {
-                        usuarioActual.AvatarFile!.CopyTo(fs);
+                        usuario.AvatarFile.CopyTo(fs);
+                    }
+
+                    repositorio.CambiarAvatar(usuario);
+                    TempData["success"] = "Imagen modificada correctamente";
+                    /*if( u.Id == usuario.Id)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else*/
+                    {
+                        return View("Index");
                     }
                 }
                 else
                 {
-                    usuario.Avatar = usuarioActual.Avatar;
-                }    
-                    repositorio.Modificacion(usuarioActual);
-                    TempData["success"] = "Imagen modificada correctamente";
-                    if( usuario.Id == id)
-                            {
-                                return RedirectToAction("Index", "Home");
-                            }
-                            else
-                            {
-                                return View("Index");
-                            }   
+                    TempData["Error"] = "Ocurrio un error al guardar la imagen";
+                    return RedirectToAction("Edit", usuario);
+                }
+            }
+            catch(Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return View();
             }
         }
-
 
         [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)

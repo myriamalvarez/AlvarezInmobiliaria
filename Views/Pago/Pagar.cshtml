@@ -1,13 +1,14 @@
 @model AlvarezInmobiliaria.Models.Pago
 @{
     ViewData["Title"] = "Nuevo pago";
-    var contrato = (Contrato)ViewBag.Contrato;
+    var contrato = ViewBag.Contrato;
+    
 }
 
 <h1>Nuevo pago</h1>
 <div class="container">
     <div>
-        <form method="post" asp-action="Create">
+        <form method="post" asp-action="Pagar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NumeroPago" class="control-label">Nº</label>
@@ -21,21 +22,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Importe" class="control-label"></label>
-                <input type="number" asp-for="Importe" class="form-control" />
+                <input type="number" asp-for="Importe" class="form-control" value=@contrato.Alquiler />
                 <span asp-validation-for="Importe" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ContratoId" class="control-label"></label>
-                <select class="form-control" name="ContratoId">
-                    <option value="" selected disabled>Seleccione el contrato</option>
-                    @if(ViewBag.contratos != null)
-                    {
-                        @foreach(var item in (IList<Contrato>)ViewBag.contratos)
-                        {
-                            <option value="@item.Id">@item.Id @item.Inmueble!.Direccion</option>
-                        }
-                    }
-                </select>
+                <input asp-for="ContratoId" class="form-control" value=@contrato.Id />
+                <span asp-validation-for="ContratoId" class="text-danger"></span>
             </div>
             <br>
             <div class="form-group">

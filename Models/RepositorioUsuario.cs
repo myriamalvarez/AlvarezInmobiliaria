@@ -66,6 +66,7 @@ namespace AlvarezInmobiliaria.Models
 
         public int Modificacion(Usuario usuario)
         {
+            string avatarDefault = "/img/avatarDefault.png";
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -77,6 +78,14 @@ namespace AlvarezInmobiliaria.Models
                 {
                     cmd.Parameters.AddWithValue("@nombre", usuario.Nombre);
                     cmd.Parameters.AddWithValue("@apellido", usuario.Apellido);
+                     if (String.IsNullOrEmpty(usuario.Avatar))
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", avatarDefault);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", usuario.Avatar);
+                    }
                     cmd.Parameters.AddWithValue("@avatar", usuario.Avatar);
                     cmd.Parameters.AddWithValue("@email", usuario.Email);
                     cmd.Parameters.AddWithValue("@clave", usuario.Clave);
@@ -231,6 +240,26 @@ namespace AlvarezInmobiliaria.Models
                 }
             }
             return res;
+        }
+
+        public int CambiarAvatar(Usuario usuario)
+        {
+            int res = -1;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string querry = "UPDATE usuario SET Avatar=@avatar WHERE Id=@id";
+                using (MySqlCommand cmd = new MySqlCommand(querry, conn))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@avatar",usuario.Avatar);
+                    cmd.Parameters.AddWithValue("@id", usuario.Id);
+                    conn.Open();
+                    res = cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            return res;
+
         }
     }
 }

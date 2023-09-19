@@ -2,16 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using AlvarezInmobiliaria.Models;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.ObjectModel;
 
 namespace AlvarezInmobiliaria.Controllers;
 
 public class PagoController : Controller
 {
-    private readonly ILogger<PropietarioController> _logger;
+    private readonly ILogger<PagoController> _logger;
     private readonly RepositorioPago repositorio;
     private readonly RepositorioContrato repositorioContrato;
 
-    public PagoController(ILogger<PropietarioController> logger)
+    public PagoController(ILogger<PagoController> logger)
     {
         _logger = logger;
         this.repositorio = new RepositorioPago();
@@ -29,9 +30,10 @@ public class PagoController : Controller
     [Authorize]
     public ActionResult Create()
     {
-        ViewBag.contratos = repositorioContrato.ObtenerContratos();
+        ViewBag.Contratos = repositorioContrato.ObtenerContratos();
         return View();
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -115,7 +117,7 @@ public class PagoController : Controller
             if(lista.Count == 0)
             {
                 TempData["Info"] = "El contrato no tiene pagos registrados";
-                return View("Index");
+                return RedirectToAction("Index", "Contrato");
             }
             else
             {
@@ -153,5 +155,32 @@ public class PagoController : Controller
             return View(pago);
         }
     }
-
+    [Authorize]
+    public ActionResult Pagar(int id)
+    {
+        var contrato = repositorioContrato.ObtenerPorId(id);
+        ViewBag.Contrato = contrato;
+        return View();
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public ActionResult Pagar(int id, Pago pago)
+    {
+        Pago p = new Pago();
+        try
+        {
+            p.Fecha = pago.Fecha;
+            p.Importe = pago.Importe;
+            p.ContratoId = id;
+            repositorio.Alta(pago);
+            TempData["success"] = "Pago creado con exito";
+            return RedirectToAction(nameof(PagosPorContrato), id);
+        }
+        catch(Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return RedirectToAction(nameof(Pagar), id);
+        }
+    }
 }

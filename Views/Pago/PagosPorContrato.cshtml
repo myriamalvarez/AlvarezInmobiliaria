@@ -6,8 +6,9 @@
     }
 
         <h1>Listado de Pagos del contrato @contrato.Id</h1>
-
-        <a class="btn btn-primary"asp-action="Create" asp-controller="Pago" asp-route-id="@contrato.Id">Nuevo pago</a>
+        <i class="bi bi-currency-dollar"></i>
+        <a asp-action="Pagar" asp-route-id="@contrato.Id" class="btn btn-primary" title="Pagar"><i class="bi bi-info-circle"></i>Pagar</a>
+        
 
         
         <table class="table table-striped" style="width:100%">

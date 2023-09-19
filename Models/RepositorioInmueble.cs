@@ -219,14 +219,18 @@ public class RepositorioInmueble
         using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
             var query =
-                @"SELECT i.Id, Direccion, Uso, Tipo, Ambientes, Latitud, Longitud, Precio
-                        FROM inmueble i
-                        LEFT JOIN contrato c ON i.Id = c.InmuebleId
-                        AND ((c.FechaInicio BETWEEN @desde AND @hasta)
-                        OR (c.FechaFin BETWEEN @desde AND @hasta))
-                        AND c.InmuebleId != 0
-                        WHERE c.InmuebleId IS NULL
-                        AND i.Estado = 1";
+                @"SELECT i.Id, Direccion, Uso, Tipo, Ambientes, Latitud, Longitud, Precio, PropietarioId, p.Nombre, p.Apellido
+                        FROM inmueble i JOIN Propietario p ON i.PropietarioId = p.Id
+                        WHERE i.Id IN (SELECT InmuebleId FROM contrato c 
+                        WHERE i.Estado = 1
+                        AND ((FechaInicio < @desde)AND (FechaFin < @desde))
+                        OR ((FechaInicio > @hasta)AND (FechaFin > @hasta))
+                        AND ((FechaInicio < @desde)AND (FechaFin > @hasta))
+                        OR ((FechaInicio > @desde)AND (FechaFin < @hasta))
+                        AND(FechaInicio NOT BETWEEN @desde AND @hasta)
+                        AND(FechaFin NOT BETWEEN @desde AND @hasta))
+                        OR i.Id NOT IN (SELECT InmuebleId FROM contrato);";
+
 
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
@@ -250,6 +254,13 @@ public class RepositorioInmueble
                                 Latitud = reader.GetDecimal("Latitud"),
                                 Longitud = reader.GetDecimal("Longitud"),
                                 Precio = reader.GetDecimal("Precio"),
+                                PropietarioId = reader.GetInt32("propietarioId"),
+                                Propietario = new Propietario
+                                {
+                                    Id = reader.GetInt32("propietarioId"),
+                                    Nombre = reader.GetString("nombre"),
+                                    Apellido = reader.GetString("apellido"),
+                                }
                             }
                         );
                     }
