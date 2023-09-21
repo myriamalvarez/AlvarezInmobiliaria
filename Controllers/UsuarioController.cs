@@ -92,6 +92,12 @@ namespace AlvarezInmobiliaria.Controllers
         {
             var usuario = repositorio.ObtenerPorId(id);
             ViewBag.Roles = Usuario.ObtenerRoles();
+            var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
+            var usuarioLogueado = repositorio.ObtenerPorMail(User.Identity!.Name!);
+            if (usuarioLogueado.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
+            {
+                return RedirectToAction("Restringido", "Home");
+            }
             return View(usuario);
         }
 
@@ -104,16 +110,17 @@ namespace AlvarezInmobiliaria.Controllers
             {
                 try
                 {
-                    var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
-                    if (usuarioActual.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
+
+                    var usuarioLogueado = repositorio.ObtenerPorMail(User.Identity!.Name!);
+                    if (usuarioLogueado.Id != id && !User.IsInRole("Administrador"))//si no es admin, solo se modifica el mismo
                     {
-                        return RedirectToAction(nameof(Index), "Home");
+                        return RedirectToAction("Restringido", "Home");
                     }
                     else
                     {
                         if(!User.IsInRole("Administrador"))
                         {
-                            usuario.Rol = usuarioActual.Rol;
+                            usuario.Rol = usuarioLogueado.Rol;
                         }
                         if(usuario.Clave != null)
                         {
@@ -127,7 +134,7 @@ namespace AlvarezInmobiliaria.Controllers
                         }
                         else
                         {
-                            usuario.Clave = usuarioActual.Clave;
+                            usuario.Clave = usuarioLogueado.Clave!;
                         }
 
                     if (usuario.AvatarFile != null && usuario.Id > 0)
@@ -148,12 +155,19 @@ namespace AlvarezInmobiliaria.Controllers
                     }
                     else
                     {
-                        usuario.Avatar = usuarioActual.Avatar;
+                        usuario.Avatar = usuarioLogueado.Avatar;
                     }
                     
                         repositorio.Modificacion(usuario);
                         TempData["success"] = "Usuario modificado correctamente";
-                        return RedirectToAction(nameof(Index));
+                        if(User.IsInRole("Administrador"))
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            return View();
+                        }
                     }
                 }
 
@@ -200,13 +214,14 @@ namespace AlvarezInmobiliaria.Controllers
                     {
                         repositorio.EditarDatos(id,nombre,apellido,email,rol); 
                         TempData["success"] = "Datos editados correctamente";
-                        if( usuarioActual.Id == id)
+                        if(User.IsInRole("Administrador"))
                         {
-                        return View("Details", usuarioActual);
+                            return RedirectToAction("Index");
                         }
                         else
                         {
-                            return RedirectToAction("Index", "Home");
+                            return View("Details", usuarioActual);
+                            
                         }
                     }
                 catch (Exception ex)
@@ -245,7 +260,13 @@ namespace AlvarezInmobiliaria.Controllers
                         usuario.Clave = hashNuevo;
                         repositorio.CambiarClave(id, hashNuevo);
                         TempData["Success"] = "Contraseña modificada con exito!";
-                        return RedirectToAction("Index", "Home");
+                        if(User.IsInRole("Administrador"))
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        else{
+                            return View("Home","Index");
+                        }
                     }
                     else
                     {
@@ -254,7 +275,8 @@ namespace AlvarezInmobiliaria.Controllers
                         ViewBag.Roles = Usuario.ObtenerRoles();
                         return View("Edit", usuario);
                     }                              
-                }catch(Exception ex)
+                }
+                catch(Exception ex)
                 {
                     TempData["Error"] = ex.Message;
                     return View("Edit");
@@ -265,17 +287,17 @@ namespace AlvarezInmobiliaria.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CambiarAvatar(Usuario usuario)
+        public ActionResult CambiarAvatar(int id, Usuario usuario, IFormFile AvatarFile)
         {
             try
             {       
                 var u = repositorio.ObtenerPorId(usuario.Id);
-                /*if(!User.IsInRole("Administrador"))//no soy admin
+                if(!User.IsInRole("Administrador"))//no soy admin
                 {
                     var usuarioActual = repositorio.ObtenerPorMail(User.Identity!.Name!);
                     if(usuarioActual.Id != usuario.Id)
                     return RedirectToAction("Restringido", "Home");
-                }*/
+                }
                 if(usuario.AvatarFile != null && usuario.Id > 0)
                 {
                 
@@ -285,7 +307,7 @@ namespace AlvarezInmobiliaria.Controllers
                     {
                         Directory.CreateDirectory(path);
                     }
-                    string fileName ="usuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
+                    string fileName ="Nusuario_" + usuario.Id + Path.GetExtension(usuario.AvatarFile!.FileName);
                     string pathCompleto = Path.Combine(path, fileName);
                     usuario.Avatar = Path.Combine("/avatar", fileName);
         
@@ -296,13 +318,13 @@ namespace AlvarezInmobiliaria.Controllers
 
                     repositorio.CambiarAvatar(usuario);
                     TempData["success"] = "Imagen modificada correctamente";
-                    /*if( u.Id == usuario.Id)
+                    if( User.IsInRole("Empleado"))
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else*/
+                    else
                     {
-                        return View("Index");
+                        return RedirectToAction("Index");
                     }
                 }
                 else
@@ -384,6 +406,7 @@ namespace AlvarezInmobiliaria.Controllers
                     }
                     var claims = new List<Claim>
                     {
+                        new Claim("Id", usuario.Id+""),
                         new Claim(ClaimTypes.Name, usuario.Email),
                         new Claim(ClaimTypes.Role, usuario.RolNombre),
                     };
