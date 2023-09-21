@@ -120,7 +120,7 @@ public class InmuebleController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Inmueble eliminado con exito";
+            TempData["success"] = "Inmueble eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)
@@ -148,6 +148,11 @@ public class InmuebleController : Controller
     public ActionResult InmueblesPorPropietario(int id)
     {
         var lista = repositorio.BuscarPorPropietario(id);
+        if(lista.Count == 0)
+        {
+            TempData["Info"] = "El propietario aun no posee inmuebles registrados";
+            
+        }
         return View(lista);
     }
 }

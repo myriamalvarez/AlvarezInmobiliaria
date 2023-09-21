@@ -355,7 +355,7 @@ namespace AlvarezInmobiliaria.Controllers
             try
             {
                 repositorio.Baja(id);
-                TempData["Mensaje"] = "Usuario eliminado con exito";
+                TempData["success"] = "Usuario eliminado con exito";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

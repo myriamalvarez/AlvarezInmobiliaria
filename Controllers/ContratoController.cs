@@ -242,7 +242,7 @@ public class ContratoController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Contrato eliminado con exito";
+            TempData["success"] = "Contrato eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)

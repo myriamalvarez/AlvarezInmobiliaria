@@ -110,7 +110,7 @@ public class InquilinoController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Inquilino eliminado con exito";
+            TempData["success"] = "Inquilino eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)

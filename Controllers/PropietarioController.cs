@@ -107,7 +107,7 @@ public class PropietarioController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Propietario eliminado con exito";
+            TempData["success"] = "Propietario eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)

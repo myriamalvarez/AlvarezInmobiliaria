@@ -185,8 +185,8 @@ public class RepositorioInmueble
         using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
             var query =
-                @"SELECT Id, Direccion, Uso, Tipo, Ambientes, Precio
-                        FROM inmueble WHERE Estado = 1;";
+                @"SELECT i.Id, Direccion, Uso, Tipo, Ambientes, Precio, i.PropietarioId, p.Nombre, p.Apellido
+                        FROM inmueble i INNER JOIN propietario p ON p.Id = i.PropietarioId WHERE Estado = 1;";
 
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
@@ -204,6 +204,13 @@ public class RepositorioInmueble
                                 Tipo = reader.GetInt32("Tipo"),
                                 Ambientes = reader.GetInt32("Ambientes"),
                                 Precio = reader.GetDecimal("Precio"),
+                                PropietarioId = reader.GetInt32("propietarioId"),
+                                Propietario = new Propietario
+                                {
+                                    Id = reader.GetInt32("propietarioId"),
+                                    Nombre = reader.GetString("nombre"),
+                                    Apellido = reader.GetString("apellido"),
+                                }
                             }
                         );
                     }

@@ -146,7 +146,7 @@ public class PagoController : Controller
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Pago eliminado con exito";
+            TempData["success"] = "Pago eliminado con exito";
             return RedirectToAction("Index");
         }
         catch (Exception ex)
