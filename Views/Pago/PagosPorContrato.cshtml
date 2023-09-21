@@ -4,11 +4,12 @@
         ViewData["Title"] = "Listado de Pagos ";
         var contrato = (Contrato)ViewBag.Contrato;
     }
-
-        <h1>Listado de Pagos del contrato @contrato.Id</h1>
-        <i class="bi bi-currency-dollar"></i>
-        <a asp-action="Pagar" asp-route-id="@contrato.Id" class="btn btn-primary" title="Pagar"><i class="bi bi-info-circle"></i>Pagar</a>
+        <h1>Listado de pagos del contrato N°: @contrato.Id</h1>
+        <h6>Dirección: @contrato.Inmueble!.Direccion</h6>
         
+        <a asp-action="Pagar" asp-route-id="@contrato.Id" class="btn btn-primary" title="Pagar"><i class="bi bi-currency-dollar"></i>Pagar</a>
+
+        <a asp-action="Index" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i>Volver al listado</a>
 
         
         <table class="table table-striped" style="width:100%">

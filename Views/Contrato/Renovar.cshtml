@@ -10,6 +10,10 @@
 }
 
 <h1>Renovar Contrato</h1>
+<div class="alert alert-info" role="alert">
+<h5>La fecha de finalización de este contrato es @contrato.FechaFin.ToString("dd 'de' MMMM 'del' yyyy")</h5>
+</div>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,12 +22,12 @@
             <input type="hidden" asp-for="Id">
             <div class="form-group">
                 <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control"/>
+                <input type="date" asp-for="FechaInicio" class="form-control" value=""/>
                 <span asp-validation-for="FechaInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FechaFin" class="control-label"></label>
-                <input asp-for="FechaFin" class="form-control"/>
+                <input asp-for="FechaFin" class="form-control" value=""/>
                 <span asp-validation-for="FechaFin" class="text-danger"></span>
             </div>
             <div class="form-group">

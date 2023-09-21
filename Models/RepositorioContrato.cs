@@ -254,4 +254,23 @@ public class RepositorioContrato
         }
         return contratos;  
     }
+    public int CancelarContrato(Contrato contrato)
+    {
+        int res =-1;
+        using(MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            string query = @"UPDATE contrato SET FechaFin=@fechaFin WHERE Id = @id";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@fechaFin", DateTime.Now.AddDays(-1));
+                cmd.Parameters.AddWithValue("@id", contrato.Id);
+                conn.Open();
+                res = cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+        return res;
+    }
 }

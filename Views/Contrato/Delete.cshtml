@@ -5,9 +5,7 @@
 <div class="d-flex align-items-center justify-content-between">
     <h1>Eliminar contrato</h1>
 </div>
-<h5 class="alert alert-warning">
-	La multa por la cancelación de este contrato es de: $@ViewBag.Multa
-</h5>
+
 <div class="detail-container"></div>
 <hr />
 <p>
@@ -43,7 +41,7 @@
 			e.preventDefault();
 			swal({
 				title: 'Eliminar',
-				text: 'Esta seguro que desea cancelar este contrato? Esta acción generara una multa',
+				text: 'Esta seguro que desea eliminar este contrato?',
 				icon: 'warning',
 				buttons: ["Cancelar", "Ok"],
 				dangerMode: true,

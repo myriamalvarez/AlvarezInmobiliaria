@@ -110,33 +110,41 @@ public class ContratoController : Controller
     }
 
     [Authorize(Policy = "Administrador")]
-    public ActionResult Delete(int id)
+    public ActionResult Cancelar(int id)
     {
-        var contrato = repositorio.ObtenerPorId(id);
-        var inicio = contrato.FechaInicio;
-        var fin = contrato.FechaFin;
-        var tiempoContrato = fin - inicio;
-        var hoy = DateTime.Now;
-        if(fin - hoy > tiempoContrato / 2)
+        try
         {
-            ViewBag.Multa = contrato.Alquiler * 2;
-        }
-        else
-        {
-            ViewBag.Multa = contrato.Alquiler;
-        }
+            var contrato = repositorio.ObtenerPorId(id);
+            var inicio = contrato.FechaInicio;
+            var fin = contrato.FechaFin;
+            TimeSpan tiempoContrato = fin - inicio;
+            var hoy = DateTime.Now;
+            if(fin - hoy > tiempoContrato / 2)
+            {
+                ViewBag.Multa = contrato.Alquiler * 2;
+            }
+            else
+            {
+                ViewBag.Multa = contrato.Alquiler;
+            }
         return View(contrato);
+        }
+        catch(Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return RedirectToAction("Index");
+        }
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Policy = "Administrador")]
-    public ActionResult Delete(int id, Contrato contrato)
+    public ActionResult Cancelar(int id, Contrato contrato)
     {
         try
         {
             repositorio.Baja(id);
-            TempData["Mensaje"] = "Contrato eliminado con exito";
+            TempData["Info"] = "Contrato cancelado";
             return RedirectToAction("Index");
         }
         catch (Exception ex)
@@ -205,12 +213,42 @@ public class ContratoController : Controller
         try
         {
             var lista = repositorio.BuscarPorInmuble(id);
+            if(lista.Count == 0)
+            {
+                TempData["Info"] = "Este inmueble no tiene contrato vigente";
+                return RedirectToAction("Index","Inmueble");
+            }
             return View(lista);
         }
         catch (Exception ex)
         {
             TempData["Error"] = ex.Message;
             return View();
+        }
+    }
+
+     [Authorize(Policy = "Administrador")]
+    public ActionResult Delete(int id)
+    {
+        var contrato = repositorio.ObtenerPorId(id);
+        return View(contrato);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Policy = "Administrador")]
+    public ActionResult Delete(int id, Contrato contrato) 
+    {
+        try
+        {
+            repositorio.Baja(id);
+            TempData["Mensaje"] = "Contrato eliminado con exito";
+            return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View(contrato);
         }
     }
 }

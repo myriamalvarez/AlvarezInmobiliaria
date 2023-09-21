@@ -406,7 +406,6 @@ namespace AlvarezInmobiliaria.Controllers
                     }
                     var claims = new List<Claim>
                     {
-                        new Claim("Id", usuario.Id+""),
                         new Claim(ClaimTypes.Name, usuario.Email),
                         new Claim(ClaimTypes.Role, usuario.RolNombre),
                     };

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-09-2023 a las 19:23:20
+-- Tiempo de generación: 21-09-2023 a las 18:08:07
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -43,7 +43,8 @@ CREATE TABLE `contrato` (
 INSERT INTO `contrato` (`Id`, `FechaInicio`, `FechaFin`, `Alquiler`, `InmuebleId`, `InquilinoId`) VALUES
 (7, '2023-08-01', '2025-08-01', 75000, 4, 4),
 (8, '2023-05-01', '2025-05-01', 100000, 1, 1),
-(9, '2023-06-01', '2025-06-01', 86000, 3, 3);
+(9, '2023-06-01', '2025-06-01', 86000, 3, 3),
+(12, '2023-10-02', '2023-11-02', 96000, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -74,7 +75,8 @@ INSERT INTO `inmueble` (`Id`, `Direccion`, `Uso`, `Tipo`, `Ambientes`, `Latitud`
 (4, 'Lavalle 293 P 1° B San Luis', 1, 2, 2, 999.99999, -58.32000, 1, 75000.00, 9),
 (5, 'Pringles 555 Local 2 Merlo', 1, 1, 3, 32.31000, -95.21000, 0, 66000.00, 7),
 (7, 'Falucho 555 San Luis', 1, 1, 2, 34.65420, -999.99999, 1, 63000.00, 12),
-(8, 'España 136 San Luis', 2, 5, 1, 32.30200, -65.12500, 1, 130000.00, 1);
+(8, 'España 136 San Luis', 2, 5, 1, 32.30200, -65.12500, 1, 130000.00, 1),
+(9, 'Lafinur 48 San Luis', 1, 2, 2, 999.99999, -78.82000, 0, 50000.00, 13);
 
 -- --------------------------------------------------------
 
@@ -127,7 +129,13 @@ INSERT INTO `pago` (`Id`, `NumeroPago`, `Fecha`, `Importe`, `ContratoId`) VALUES
 (4, 1, '2023-09-01', 75000, 7),
 (5, 3, '2023-07-01', 100000, 8),
 (7, 4, '2023-08-02', 100000, 8),
-(10, 1, '2023-06-02', 86000, 9);
+(11, 1, '2023-10-01', 960000, 11),
+(12, 1, '2023-09-01', 100000, 0),
+(13, 2, '2023-10-01', 960000, 0),
+(14, 3, '2023-10-01', 960000, 0),
+(15, 4, '2023-10-01', 96000, 0),
+(16, 2, '2023-10-01', 96000, 11),
+(17, 1, '2023-06-01', 86000, 9);
 
 -- --------------------------------------------------------
 
@@ -156,7 +164,8 @@ INSERT INTO `propietario` (`Id`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email
 (7, 'Anibal', 'Tobio', '28874231', '0266-4466354', 'anibaltobio@gmail.com'),
 (9, 'Jose', 'Romano', '35455278', '0266-4356814', 'joseromano@gmail.com'),
 (11, 'Adriana', 'Gomez', '25889242', '0266-4548800', 'adrianagomez@gmail.com'),
-(12, 'Mirta', 'Vall', '36854240', '0266-4591248', 'mirtavall@gmail.com');
+(12, 'Mirta', 'Vall', '36854240', '0266-4591248', 'mirtavall@gmail.com'),
+(13, 'Adriana', 'Funes', '25889242', '0266-4548800', 'aa@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -180,12 +189,12 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Avatar`, `Email`, `Clave`, `Rol`) VALUES
 (2, 'Myriam', 'Alvarez', '/avatar\\usuario_2.jpg', 'myriamalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
-(3, 'Luis', 'Alvarez', '/avatar\\usuario_3.jpg', 'luisalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
-(4, 'Luisa', 'Alvarez', '/avatar\\usuario_4.jpg', 'luisaalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
-(5, 'Juan', 'Perez', '/avatar\\usuario_5.jpg', 'juanperez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
-(6, 'Carla', 'Merlo', '/avatar\\usuario_6.jpg', 'carlamerlo@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
-(7, 'Raul', 'Aguilar', '/avatar\\usuario_7.png', 'raul@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
-(9, 'Karina', 'Juarez', '/avatar\\usuario_9.jpg', 'karijuarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2);
+(3, 'Luis', 'Alvarez', '/avatar\\usuario_5.jpg', 'luisalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(4, 'Luisa', 'Alvarez', '/avatar\\Nusuario_4.jpg', 'luisaalvarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(5, 'Juan', 'Perez', '/avatar\\usuario_5.png', 'juanperez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(6, 'Carla', 'Merlo', '/avatar\\Nusuario_6.jpg', 'carlamerlo@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2),
+(7, 'Raul', 'Aguilar', '/avatar\\Nusuario_7.jpg', 'raul@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 1),
+(9, 'Karin', 'Juarez', '/avatar\\Nusuario_9.jpg', 'karijuarez@gmail.com', 'Kl6IbrJVaAWPV8R9InNl7W7BgmYd7fb3Bco4f/g6y0c=', 2);
 
 --
 -- Índices para tablas volcadas
@@ -239,37 +248,37 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
 --
 ALTER TABLE `inquilino`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
 --
 ALTER TABLE `propietario`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas
