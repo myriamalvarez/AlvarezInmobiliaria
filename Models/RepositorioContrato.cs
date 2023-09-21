@@ -10,7 +10,7 @@ public class RepositorioContrato
 
     public RepositorioContrato()
     {
-        connectionString = "Server=localhost;User=root;Password=;Database=alvarez;SslMode=none";
+        connectionString = "Server=localhost;User=root;Password=;Database=malvarez;SslMode=none";
     }
 
     public int Alta(Contrato contrato)

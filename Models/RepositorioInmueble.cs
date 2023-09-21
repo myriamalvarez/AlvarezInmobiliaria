@@ -9,7 +9,7 @@ public class RepositorioInmueble
 
     public RepositorioInmueble()
     {
-        connectionString = "Server=localhost;User=root;Password=;Database=alvarez;SslMode=none";
+        connectionString = "Server=localhost;User=root;Password=;Database=malvarez;SslMode=none";
     }
 
     public List<Inmueble> ObtenerInmuebles()

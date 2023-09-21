@@ -9,7 +9,7 @@ namespace AlvarezInmobiliaria.Models
 
         public RepositorioPago()
         {
-            connectionString = "Server=localhost;User=root;Password=;Database=alvarez;SslMode=none";
+            connectionString = "Server=localhost;User=root;Password=;Database=malvarez;SslMode=none";
         }
 
         public List<Pago> ObtenerPagos()

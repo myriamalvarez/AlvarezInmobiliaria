@@ -8,7 +8,7 @@ public class RepositorioInquilino
 
     public RepositorioInquilino()
     {
-        connectionString = "Server=localhost;User=root;Password=;Database=alvarez;SslMode=none";
+        connectionString = "Server=localhost;User=root;Password=;Database=malvarez;SslMode=none";
     }
 
     public List<Inquilino> ObtenerInquilinos()

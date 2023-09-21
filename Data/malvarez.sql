@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-09-2023 a las 18:08:07
+-- Tiempo de generación: 22-09-2023 a las 01:56:57
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `alvarez`
+-- Base de datos: `malvarez`
 --
 
 -- --------------------------------------------------------
@@ -124,18 +124,11 @@ CREATE TABLE `pago` (
 --
 
 INSERT INTO `pago` (`Id`, `NumeroPago`, `Fecha`, `Importe`, `ContratoId`) VALUES
-(1, 1, '2023-05-01', 100000, 8),
-(3, 2, '2023-06-01', 100000, 8),
-(4, 1, '2023-09-01', 75000, 7),
-(5, 3, '2023-07-01', 100000, 8),
-(7, 4, '2023-08-02', 100000, 8),
-(11, 1, '2023-10-01', 960000, 11),
-(12, 1, '2023-09-01', 100000, 0),
-(13, 2, '2023-10-01', 960000, 0),
-(14, 3, '2023-10-01', 960000, 0),
-(15, 4, '2023-10-01', 96000, 0),
-(16, 2, '2023-10-01', 96000, 11),
-(17, 1, '2023-06-01', 86000, 9);
+(8, 1, '0003-05-01', 100000, 8),
+(9, 2, '2023-06-01', 100000, 8),
+(10, 1, '2023-09-01', 75000, 7),
+(11, 3, '2023-07-01', 100000, 8),
+(12, 4, '2023-08-02', 100000, 8);
 
 -- --------------------------------------------------------
 
@@ -206,14 +199,14 @@ INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Avatar`, `Email`, `Clave`, `
 ALTER TABLE `contrato`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `InquilinoId` (`InquilinoId`),
-  ADD KEY `InmuebleId` (`InmuebleId`,`InquilinoId`) USING BTREE;
+  ADD KEY `InmuebleId` (`InmuebleId`);
 
 --
 -- Indices de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `PropietarioId` (`PropietarioId`) USING BTREE;
+  ADD KEY `PropietarioId` (`PropietarioId`);
 
 --
 -- Indices de la tabla `inquilino`
@@ -226,7 +219,7 @@ ALTER TABLE `inquilino`
 --
 ALTER TABLE `pago`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `ContratoId` (`ContratoId`);
+  ADD KEY `pago_ibfk_1` (`ContratoId`);
 
 --
 -- Indices de la tabla `propietario`
@@ -266,7 +259,7 @@ ALTER TABLE `inquilino`
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
@@ -288,14 +281,20 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  ADD CONSTRAINT `contrato_ibfk_1` FOREIGN KEY (`InquilinoId`) REFERENCES `inquilino` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `contrato_ibfk_2` FOREIGN KEY (`InmuebleId`) REFERENCES `inmueble` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `contrato_ibfk_1` FOREIGN KEY (`InquilinoId`) REFERENCES `inquilino` (`Id`),
+  ADD CONSTRAINT `contrato_ibfk_2` FOREIGN KEY (`InmuebleId`) REFERENCES `inmueble` (`Id`);
 
 --
 -- Filtros para la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  ADD CONSTRAINT `inmueble_ibfk_1` FOREIGN KEY (`PropietarioId`) REFERENCES `propietario` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `inmueble_ibfk_1` FOREIGN KEY (`PropietarioId`) REFERENCES `propietario` (`Id`);
+
+--
+-- Filtros para la tabla `pago`
+--
+ALTER TABLE `pago`
+  ADD CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`ContratoId`) REFERENCES `contrato` (`Id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

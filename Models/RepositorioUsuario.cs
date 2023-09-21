@@ -9,7 +9,7 @@ namespace AlvarezInmobiliaria.Models
 
         public RepositorioUsuario()
         {
-            connectionString = "Server=localhost;User=root;Password=;Database=alvarez;SslMode=none";
+            connectionString = "Server=localhost;User=root;Password=;Database=malvarez;SslMode=none";
         }
 
         public int Alta(Usuario usuario)
